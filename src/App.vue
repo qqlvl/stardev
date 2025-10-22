@@ -39,3 +39,10 @@ onMounted(() => {
     </main>
   </div>
 </template>
+
+<style>
+body {
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+</style>
+

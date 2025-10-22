@@ -9,6 +9,9 @@ export default {
         neon: '0 0 12px rgba(240, 240, 240, 0.5)',        // ← shadow-neon (если используешь)
       },
       borderRadius: { '2xl': '1.25rem' },
+       fontFamily: {
+      sans: ['SF Pro Display', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+    },
     },
   },
   plugins: [daisyui],
