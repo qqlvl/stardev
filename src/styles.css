@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #app {
+  height: 100%;
+  background-color: #0A0E18;
+  color: #E9EEF8;
+}
+
+@layer base {
+  [data-theme='star-dark']{
+    /* новые переменные daisyUI v5 */
+    --color-primary: #ffffff;
+    --color-primary-content: #ffffff;
+    --color-accent: #3AC1FF;
+    --color-neutral: #232E3C;
+
+    --color-base-100: #0A0E18; /* фон */
+    --color-base-200: #121726;
+    --color-base-content: #E9EEF8; /* текст */
+
+    /* на всякий случай – совместимость с v3/v4 */
+    --p: 124 100% 66%;
+    --pc: 0 0% 100%;
+    --a: 196 100% 62%;
+    --n: 214 27% 20%;
+    --b1: 223 41% 7%;
+    --b2: 224 37% 12%;
+    --bc: 220 53% 95%;
+  }
+}
+
+.glass-card {
+  @apply rounded-2xl border border-white/10 bg-white/5 backdrop-blur-lg shadow-glass;
+}
+
+.neon-border {
+  box-shadow: 0 0 20px rgba(124,92,255,.2), inset 0 0 10px rgba(124,92,255,.15);
+  border: 1px solid rgba(124,92,255,.3);
+}
