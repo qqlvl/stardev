@@ -7,14 +7,30 @@
     </div>
 
     <div class="flex items-center justify-between mb-1">
-      <div class="text-sm opacity-80">Баланс</div>
+      <div class="text-4xl font-extrabold">STAR</div>
+        <button class="btn btn-xs btn-ghost">
+          <img src="/src/assets/img/user.svg" alt="user" class="w-7 h-7" />
+        </button>
     </div>
 
     <div class="text-4xl font-extrabold tracking-tight">$114.05</div>
 
     <div class="mt-3 grid grid-cols-2 gap-2">
-      <button class="btn btn-outline btn-sm rounded-xl">????</button>
-      <button class="btn btn-primary btn-sm rounded-xl">Депозит</button>
+
+    <button class="btn-glass-outline">Играть</button>
+  
+    <button
+      class="btn-glass-outline rounded-xl font-semibold relative overflow-hidden"
+      v-motion
+      :initial="{ scale: 1 }"
+      :hovered="{ scale: 1.02 }"
+      :pressed="{ scale: 0.98 }"
+    >
+      <span class="relative z-10">Депозит</span>
+      <!-- отдельный слой для блика -->
+      <span class="shimmer-layer absolute inset-0 pointer-events-none"></span>
+    </button>
+
     </div>
   </div>
 </template>

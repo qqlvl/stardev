@@ -1,9 +1,27 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import LiveTicker from './components/LiveTicker.vue'
 import BalanceCard from './components/BalanceCard.vue'
+import QuickActions, { type QAKey } from './components/QuickActions.vue'
+
 
 const platform = ref('not-telegram')
 const user = ref<{ first_name?: string; username?: string } | null>(null)
+
+
+const qa = ref<QAKey | null>(null)
+
+function onBonus() {
+  // TODO: открыть модалку ежедневного бонуса
+}
+function onReferrals() {
+  // TODO: открыть модалку/экран с реф-ссылкой
+}
+function onChat() {
+  const tg = (window as any).Telegram?.WebApp
+  const url = 'https://t.me/your_chat_here'
+  tg?.openTelegramLink ? tg.openTelegramLink(url) : window.open(url, '_blank')
+}
 
 onMounted(() => {
   document.documentElement.setAttribute('data-theme', 'star-dark')
@@ -16,18 +34,8 @@ onMounted(() => {
 
 <template>
   <div data-theme="star-dark" class="min-h-full bg-base-100 text-base-content pb-24">
-    <div class="navbar bg-base-100/60 backdrop-blur border-b border-white/10 sticky top-0">
-      <div class="flex-1 px-2">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-full flex items-center justify-center text-white"
-               style="background:linear-gradient(135deg,#7C5CFF,#3AC1FF)">★</div>
-          <span class="font-bold tracking-wide text-white">STAR Casino</span>
-        </div>
-      </div>
-      <div class="flex-none pr-2">
-        <button class="btn btn-sm p-2 btn-primary">Профиль</button>
-      </div>
-    </div>
+    <!-- лайв-лента -->
+    <LiveTicker />
 
     <main class="p-4 grid gap-4">
       <section class="text-sm opacity-70">
@@ -35,8 +43,17 @@ onMounted(() => {
         <p v-if="user">User: <b>{{ user.first_name }}</b> (@{{ user.username }})</p>
       </section>
 
+      <!-- баннер с балансом -->
       <BalanceCard />
+
+      
+      <!-- дальше твоя сетка игр -->
+      <!-- <GameGrid /> -->
     </main>
+
+    <QuickActions v-model="qa" fixed @bonus="onBonus" @referrals="onReferrals" @chat="onChat" />
+
+
   </div>
 </template>
 
