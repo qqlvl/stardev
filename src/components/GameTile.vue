@@ -1,13 +1,58 @@
-<script setup lang="ts">
-const props = defineProps<{ title: string; subtitle?: string; gradient?: string; badge?: string }>()
-</script>
-
 <template>
-  <button
-    class="relative rounded-2xl p-4 text-left text-white ring-1 ring-white/10 hover:ring-accent/40 hover:shadow-2xl transition fade-in-up"
-    :style="{ background: props.gradient || 'linear-gradient(135deg,#6E35FF,#FF8C53)' }">
-    <div class="text-xl font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,.45)]">{{ title }}</div>
-    <div class="text-sm opacity-90">{{ subtitle }}</div>
-    <span v-if="badge" class="absolute right-3 top-3 badge badge-accent text-xs">{{ badge }}</span>
-  </button>
+  <article
+    class="group grid gap-2 outline-none cursor-pointer"
+    @click="$emit('play', game)"
+  >
+    <div class="relative rounded-2xl overflow-hidden bg-[#0f0f12] aspect-[16/9]">
+      <img
+        :src="game.thumbnail"
+        :alt="`${game.title} — ${game.provider ?? ''}`"
+        class="w-full h-full object-cover"
+        loading="lazy"
+        decoding="async"
+      />
+
+      <div class="absolute top-2 left-2 flex gap-2">
+        <span v-if="game.isNew" class="px-2 py-1 text-[10px] font-semibold rounded-full bg-white/10 backdrop-blur">
+          NEW
+        </span>
+        <span v-if="game.isPopular" class="px-2 py-1 text-[10px] font-semibold rounded-full bg-white/10 backdrop-blur">
+          HOT
+        </span>
+      </div>
+
+      <!-- overlay -->
+      <div
+        class="absolute inset-0 grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity
+               bg-gradient-to-t from-black/60 via-black/10 to-transparent"
+      >
+        <button
+          class="px-4 py-2 rounded-full font-bold bg-white text-black"
+          @click.stop="$emit('play', game)"
+        >
+          Играть
+        </button>
+      </div>
+    </div>
+
+    <header class="grid">
+      <h3 class="text-white text-sm font-bold truncate" :title="game.title">{{ game.title }}</h3>
+      <div v-if="game.provider" class="text-xs text-white/60">{{ game.provider }}</div>
+    </header>
+  </article>
 </template>
+
+<script setup lang="ts">
+export type Game = {
+  id: string
+  title: string
+  thumbnail: string
+  provider?: string
+  playUrl?: string
+  isNew?: boolean
+  isPopular?: boolean
+}
+
+defineProps<{ game: Game }>()
+defineEmits<{ (e:'play', game: Game): void }>()
+</script>
