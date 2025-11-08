@@ -3,8 +3,7 @@ import { useRouter } from 'vue-router'
 import LiveTicker from '@/components/LiveTicker.vue'
 import QuickActions from '@/components/QuickActions.vue'
 
-const { title, showTicker = true, showQuickActions = true } = defineProps<{
-  title?: string
+const { showTicker = true, showQuickActions = true } = defineProps<{
   showTicker?: boolean
   showQuickActions?: boolean
 }>()
