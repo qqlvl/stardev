@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const spinning = ref(false)
+// const spinning = ref(false)
 const lastWin = ref(0)
 
-function onSpin() {
-  spinning.value = true
-  setTimeout(() => {
-    lastWin.value = 0 // пока пусто, просто 0
-    spinning.value = false
-  }, 600)
-}
+// function onSpin() {
+//   spinning.value = true
+//   setTimeout(() => {
+//     lastWin.value = 0 // пока пусто, просто 0
+//     spinning.value = false
+//   }, 600)
+// }
 </script>
 
 <template>
