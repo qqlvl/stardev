@@ -1,8 +1,15 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/index.html" }
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+
+   
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/favicon.ico", "dest": "/favicon.ico" },
+    { "src": "/robots.txt", "dest": "/robots.txt" },
+    { "src": "/manifest.webmanifest", "dest": "/manifest.webmanifest" },
+    { "src": "/(.*)\\.(js|mjs|css|map|json|png|jpg|jpeg|gif|svg|webp|ico|woff2|woff|ttf|eot|wasm)", "dest": "/$1.$2" },
+
+    
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
