@@ -29,7 +29,7 @@ function goBack() { router.push('/') }
         <button class="btn btn-xs" @click="goBack">←</button>
 
         <h1 class="font-semibold text-sm flex-1 truncate">
-          {{ title ?? 'Game' }}
+          Назад
         </h1>
 
         <!-- правый слот: можно передать что-то вроде мини-баланса -->

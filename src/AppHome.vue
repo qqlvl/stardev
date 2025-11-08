@@ -6,6 +6,7 @@ import GamesGrid from './components/GamesGrid.vue'
 
 
 import slotsPng   from './assets/img/games/slots.png'
+import soonPng   from './assets/img/games/soon.png'
 
 type Game = {
   id: string
@@ -23,11 +24,11 @@ const qa = ref<QAKey | null>(null)
 /** ВАЖНО: id должны быть уникальны, иначе будут конфликты ключей в v-for */
 const games = ref<Game[]>([
   { id:'slots',  title:'',  thumbnail: slotsPng,  isPopular:true, playUrl:'/play/slots' },
-  { id:'mines',  title:'',  thumbnail: slotsPng, isNew:true,    playUrl:'/play/mines' },
-  { id:'crash',  title:'',  thumbnail: slotsPng, isNew:true,    playUrl:'/play/crash' },
-  { id:'dice',   title:'',  thumbnail: slotsPng,                playUrl:'/play/dice' },
-  { id:'plinko', title:'',  thumbnail: slotsPng,                playUrl:'/play/plinko' },
-  { id:'keno',   title:'',  thumbnail: slotsPng,                playUrl:'/play/keno' },
+  { id:'mines',  title:'',  thumbnail: soonPng, isNew:true,    playUrl:'/play/mines' },
+  { id:'crash',  title:'',  thumbnail: soonPng, isNew:true,    playUrl:'/play/crash' },
+  { id:'dice',   title:'',  thumbnail: soonPng,                playUrl:'/play/dice' },
+  { id:'plinko', title:'',  thumbnail: soonPng,                playUrl:'/play/plinko' },
+  { id:'keno',   title:'',  thumbnail: soonPng,                playUrl:'/play/keno' },
 ])
 
 function play(g: Game) {
