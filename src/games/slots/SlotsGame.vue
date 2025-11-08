@@ -25,9 +25,7 @@ function onSpin() {
     </div>
 
     <div class="flex gap-2">
-      <button class="btn btn-primary" :disabled="spinning" @click="onSpin">
-        {{ spinning ? 'Spinning…' : 'SPIN' }}
-      </button>
+
     </div>
   </section>
 </template>

@@ -58,13 +58,6 @@ onMounted(() => {
     <LiveTicker />
 
     <main class="p-4 grid gap-4">
-      <!-- если нужно — верни блок с платформой/юзером -->
-      <!--
-      <section class="text-sm opacity-70">
-        <p>Platform: <b>{{ platform }}</b></p>
-        <p v-if="user">User: <b>{{ user.first_name }}</b> (@{{ user.username }})</p>
-      </section>
-      -->
 
       <BalanceCard />
 
