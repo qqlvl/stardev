@@ -5,6 +5,8 @@ import QuickActions, { type QAKey } from './components/QuickActions.vue'
 import GamesGrid from './components/GamesGrid.vue'
 
 
+import slotsPng   from './assets/img/games/slots.png'
+
 type Game = {
   id: string
   title: string
@@ -20,12 +22,12 @@ const qa = ref<QAKey | null>(null)
 
 /** ВАЖНО: id должны быть уникальны, иначе будут конфликты ключей в v-for */
 const games = ref<Game[]>([
-  { id:'slots',  title:'Slots',  thumbnail:'/img/games/dog-house.jpg',  isPopular:true, playUrl:'/play/slots' },
-  { id:'mines',  title:'Mines',  thumbnail:'/img/games/sugar-rush.jpg', isNew:true,    playUrl:'/play/mines' },
-  { id:'crash',  title:'Crash',  thumbnail:'/img/games/sugar-rush.jpg', isNew:true,    playUrl:'/play/crash' },
-  { id:'dice',   title:'Dice',   thumbnail:'/img/games/sugar-rush.jpg',                playUrl:'/play/dice' },
-  { id:'plinko', title:'Plinko', thumbnail:'/img/games/sugar-rush.jpg',                playUrl:'/play/plinko' },
-  { id:'keno',   title:'Keno',   thumbnail:'/img/games/sugar-rush.jpg',                playUrl:'/play/keno' },
+  { id:'slots',  title:'',  thumbnail: slotsPng,  isPopular:true, playUrl:'/play/slots' },
+  { id:'mines',  title:'',  thumbnail: slotsPng, isNew:true,    playUrl:'/play/mines' },
+  { id:'crash',  title:'',  thumbnail: slotsPng, isNew:true,    playUrl:'/play/crash' },
+  { id:'dice',   title:'',  thumbnail: slotsPng,                playUrl:'/play/dice' },
+  { id:'plinko', title:'',  thumbnail: slotsPng,                playUrl:'/play/plinko' },
+  { id:'keno',   title:'',  thumbnail: slotsPng,                playUrl:'/play/keno' },
 ])
 
 function play(g: Game) {

@@ -7,7 +7,7 @@
     </div>
 
     <div class="flex items-center justify-between mb-1">
-      <div class="text-4xl font-extrabold">STAR</div>
+      <div class="text-5xl font-extrabold tracking-tight text-iridescent">STAR</div>
         <button class="btn btn-xs btn-ghost">
           <img src="/src/assets/img/user.svg" alt="user" class="w-7 h-7" />
         </button>

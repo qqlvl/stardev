@@ -36,7 +36,7 @@
     </div>
 
     <header class="grid">
-      <h3 class="text-white text-sm font-bold truncate" :title="game.title">{{ game.title }}</h3>
+      <!-- <h3 class="text-white text-sm font-bold truncate" :title="game.title">{{ game.title }}</h3> -->
       <div v-if="game.provider" class="text-xs text-white/60">{{ game.provider }}</div>
     </header>
   </article>
