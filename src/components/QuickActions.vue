@@ -1,10 +1,7 @@
 <template>
   <!-- wrapper: фиксированный низ (если fixed) или встроенный блок -->
   <div
-    :class="[
-      fixed ? 'fixed left-0 right-0 bottom-0 z-40' : 'relative',
-      'px-4',
-    ]"
+    :class="[fixed ? 'fixed left-0 right-0 bottom-0 z-40' : 'relative', 'px-4']"
     style="padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px)"
   >
     <!-- баннер -->
@@ -18,13 +15,12 @@
 
       <!-- контент баннера -->
       <div class="px-3 py-3 sm:px-4 sm:py-4">
-
         <!-- кнопки -->
         <div class="grid grid-cols-3 gap-2 sm:gap-3">
           <!-- Бонус -->
           <button
             :class="btnClass('bonus')"
-            @click="onPick('bonus'); $emit('bonus')"
+            @click="onPick('bonus'); emit('bonus')"
             aria-label="Ежедневный бонус"
           >
             <span class="icon-wrap">
@@ -38,7 +34,7 @@
           <!-- Рефералы -->
           <button
             :class="btnClass('referrals')"
-            @click="onPick('referrals'); $emit('referrals')"
+            @click="onPick('referrals'); emit('referrals')"
             aria-label="Реферальная программа"
           >
             <span class="icon-wrap">
@@ -52,7 +48,7 @@
           <!-- Чат -->
           <button
             :class="btnClass('chat')"
-            @click="onPick('chat'); $emit('chat')"
+            @click="onPick('chat'); emit('chat')"
             aria-label="Открыть чат"
           >
             <span class="icon-wrap">
@@ -85,12 +81,8 @@ const emit = defineEmits<{
 
 function onPick(key: QAKey) {
   emit('update:modelValue', key)
-  // авто-сброс, если не нужно держать состояние выделения
+  // авто-сброс подсветки
   setTimeout(() => emit('update:modelValue', null), 200)
-}
-
-function labelByKey(k: QAKey) {
-  return k === 'bonus' ? 'Бонус' : k === 'referrals' ? 'Рефералы' : 'Чат'
 }
 
 function btnClass(key: QAKey) {

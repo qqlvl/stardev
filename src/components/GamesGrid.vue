@@ -22,13 +22,27 @@
 </template>
 
 <script setup lang="ts">
-import GameTile, { type Game } from './GameTile.vue'
+/** Согласован с AppHome.vue: обязательные title и thumbnail */
+type GridGame = {
+  id: string
+  title: string
+  thumbnail: string
+  playUrl?: string
+  isNew?: boolean
+  isPopular?: boolean
+}
 
-const props = defineProps<{ games: Game[] }>()
-const emit = defineEmits<{ (e:'play', game: Game): void }>()
-function onPlay(g: Game) {
-  // по умолчанию просто эмитим наверх;
-  // на странице можно сделать router.push(g.playUrl ?? `/play/${g.id}`)
-  emit('play', g)
+/** пропс games */
+const { games } = defineProps<{ games: GridGame[] }>()
+
+/** событие play(game) */
+const emit = defineEmits<{
+  (e: 'play', game: GridGame): void
+}>()
+
+function onPlay(game: GridGame) {
+  emit('play', game)
 }
 </script>
+
+
