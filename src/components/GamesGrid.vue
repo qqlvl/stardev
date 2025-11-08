@@ -22,6 +22,7 @@
 </template>
 
 <script setup lang="ts">
+import GameTile from './GameTile.vue'  // <<< ВАЖНО: добавить импорт
 /** Согласован с AppHome.vue: обязательные title и thumbnail */
 type GridGame = {
   id: string
