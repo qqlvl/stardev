@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+// import { ref } from 'vue'
 
 // const spinning = ref(false)
-const lastWin = ref(0)
+// const lastWin = ref(0)
 
 // function onSpin() {
 //   spinning.value = true
@@ -16,8 +16,8 @@ const lastWin = ref(0)
 <template>
   <section class="grid gap-4">
     <header class="flex items-center justify-between">
-      <h1 class="text-lg font-bold">Slots (MVP)</h1>
-      <div class="text-sm opacity-70">Last win: {{ lastWin }}</div>
+      <div class="text-3xl font-extrabold tracking-tight text-iridescent">Slots</div>
+    
     </header>
 
     <div class="grid place-items-center h-48 rounded-xl ring-1 ring-white/10 bg-white/5">

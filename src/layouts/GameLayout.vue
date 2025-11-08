@@ -25,7 +25,7 @@ function goBack() { router.push('/') }
       class="sticky top-0 z-40 backdrop-blur-md bg-base-100/80 border-b border-white/10"
     >
       <div class="mx-auto max-w-screen-sm px-4 h-12 flex items-center gap-3">
-        <button class="btn btn-xs" @click="goBack">←</button>
+        <button class="" @click="goBack">←</button>
 
         <h1 class="font-semibold text-sm flex-1 truncate">
           Назад
