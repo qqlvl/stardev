@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, shallowRef, markRaw } from 'vue'  // ⬅️ вместо ref
 import { useRoute } from 'vue-router'
 import GameLayout from '@/layouts/GameLayout.vue'
 import { gamesRegistry } from '../games'
@@ -7,15 +7,15 @@ import { gamesRegistry } from '../games'
 const route = useRoute()
 const id = String(route.params.id)
 
-const Comp = ref<any>(null)
-const error = ref<string | null>(null)
+const Comp = shallowRef<any>(null)   // ⬅️ shallowRef
+const error = shallowRef<string | null>(null)
 
 onMounted(async () => {
   const loader = gamesRegistry[id]
   if (!loader) { error.value = `Игра "${id}" не найдена`; return }
   try {
     const mod = await loader()
-    Comp.value = mod.default
+    Comp.value = markRaw(mod.default)  // ⬅️ markRaw, чтобы не реактивить компонент
   } catch (e: any) {
     error.value = e?.message ?? 'Не удалось загрузить игру'
   }
