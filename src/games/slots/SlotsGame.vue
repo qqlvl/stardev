@@ -15,7 +15,8 @@ const isSpinning = computed<boolean>(() => m.spinning.value)
 </script>
 
 <template>
-  <section class="grid gap-4 pb-28">
+  <!-- добавлен класс slots-stage -->
+  <section class="slots-stage grid gap-4 pb-28">
     <header class="flex items-center justify-between">
       <h2 class="font-semibold">Slots</h2>
       <div class="text-sm opacity-70" v-if="isGood">Win!</div>
@@ -23,7 +24,8 @@ const isSpinning = computed<boolean>(() => m.spinning.value)
 
     <ItemPreview :betArray="m.betArray" />
 
-    <div class="slots">
+    <!-- заменено: .slots -> .reels -->
+    <div class="reels">
       <Slot
         v-for="(cell, i) in combo"
         :key="i"
@@ -51,15 +53,49 @@ const isSpinning = computed<boolean>(() => m.spinning.value)
 </template>
 
 <style scoped>
-.slots {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin: 0 auto;
-  max-width: 360px;   /* чтобы 3 барабана не растягивались */
-  min-height: 160px;  /* чтобы место под них было даже до первого спина */
+/* ====== SLOTS SCENE (контейнер экрана) ====== */
+.slots-stage{
+  /* управляемая ширина блока — красиво от 320 до десктопа */
+  --stage-w: clamp(300px, 92vw, 820px);
+  --gap: clamp(8px, 2vw, 18px);
+  --radius: clamp(10px, 16px, 20px);
+  --card-w: clamp(86px, 22vw, 180px); /* ширина одной «карты» барабана */
+
+  width: min(100%, var(--stage-w));
+  margin-inline: auto;
+  display: grid;
+  row-gap: var(--gap);
+  padding: clamp(8px, 2vw, 16px);
 }
+
+/* ====== REELS (грид из трёх барабанов) ====== */
+.reels{
+  display: grid;
+  grid-template-columns: repeat(3, var(--card-w));
+  justify-content: center;
+  gap: var(--gap);
+}
+
+/* Узкие телефоны: уменьшаем карты, чтобы всё помещалось */
+@media (max-width: 360px){
+  .slots-stage{ --card-w: 30vw; }
+}
+
+/* Широкие: чуть больше «воздуха» */
+@media (min-width: 900px){
+  .slots-stage{ --gap: 20px; }
+}
+
+/* Безопасная зона iOS */
+@supports(padding:max(0px)){
+  .slots-stage{ padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+}
+
+/* Уважение к уменьшению анимаций */
+@media (prefers-reduced-motion: reduce){
+  .reels { transition: none !important; }
+}
+
+/* существующее */
 .controls { display:flex; gap:8px; justify-content:center; align-items:center; }
 </style>
-
