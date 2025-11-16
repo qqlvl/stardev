@@ -53,67 +53,57 @@ const isSpinning = computed<boolean>(() => m.spinning.value)
 </template>
 
 <style scoped>
-/* ====== SLOTS SCENE (контейнер экрана) ====== */
+/* ====== СЦЕНА СЛОТОВ ====== */
 .slots-stage {
-  /* базовые переменные размера под телефон */
-  --stage-w: 100%;
-  --gap: 12px;
+  /* Управляющие переменные для размеров слотов */
+  --card-w: clamp(88px, 26vw, 110px);  /* ширина одного барабана */
   --radius: 18px;
-  --card-w: clamp(90px, 26vw, 120px);
+  --gap: 12px;
 
   width: 100%;
-  margin-inline: auto;
+  max-width: 420px;          /* внутри "телефона" */
+  margin: 0 auto;
   display: grid;
   row-gap: var(--gap);
 }
 
-/* заголовок / верхняя часть уже хорошо работает через tailwind в шаблоне */
-
-/* ====== РЯД БАРАБАНОВ ====== */
+/* ряд барабанов */
 .reels {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--gap);
-  justify-items: center;
+  display: flex;
+  justify-content: center;
   align-items: stretch;
-  width: 100%;
+  gap: var(--gap);
 }
 
-/* Узкие телефоны: чуть уменьшаем ширину слотов */
-@media (max-width: 360px) {
-  .slots-stage {
-    --card-w: 80px;
-    --gap: 10px;
-  }
-}
-
-/* Чуть больше воздуха на широких (но всё равно в пределах "телефона") */
-@media (min-width: 480px) {
-  .slots-stage {
-    --gap: 14px;
-  }
-}
-
-/* Безопасная зона iOS — можно оставить мягкой */
-@supports(padding: max(0px)) {
-  .slots-stage {
-    padding-bottom: max(0px, env(safe-area-inset-bottom));
-  }
-}
-
-/* Уважение к уменьшению анимаций */
-@media (prefers-reduced-motion: reduce) {
-  .reels {
-    transition: none !important;
-  }
-}
-
-/* Контролы под слотом */
+/* блок с контролами под барабанами */
 .controls {
   display: flex;
   gap: 8px;
   justify-content: center;
   align-items: center;
 }
+
+/* чуть подтягиваем верха/низа на маленьких экранах */
+@media (max-width: 390px) {
+  .slots-stage {
+    --card-w: clamp(80px, 24vw, 100px);
+    --gap: 10px;
+  }
+}
+
+/* безопасная зона iOS */
+@supports (padding: max(0px)) {
+  .slots-stage {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+/* уважение к reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .reels {
+    transition: none !important;
+  }
+}
 </style>
+
 

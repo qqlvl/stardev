@@ -44,138 +44,109 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
 </template>
 
 <style scoped>
-/* ===== БАРАБАН: фикс. пропорция и адаптивная ширина от родителя ===== */
+/* ===== БАРАБАН ===== */
 .slot {
-  width: var(--card-w, 140px);       /* приходит из .slots-stage; есть fallback */
-  aspect-ratio: 100 / 170;           /* как в твоём рефе */
+  width: var(--card-w, 110px);       /* берём ширину из .slots-stage */
+  aspect-ratio: 100 / 170;           /* примерно как 100x170px */
   position: relative;
-  border-radius: var(--radius, 16px);
+  border-radius: var(--radius, 18px);
   border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.04);
+  background: rgba(0, 0, 0, 0.35);
   overflow: hidden;
-  box-shadow: inset 0 4px 18px rgba(0,0,0,.25);
+  box-shadow: inset 0 4px 18px rgba(0,0,0,.45);
   display: flex;
-  place-items: center;
-}
-
-/* внутренняя карта — чуть меньше, чтобы дать «воздуха» */
-.card{
-  width: 86%;
-  height: 86%;
-  position: relative;
-  border-radius: calc(var(--radius, 16px) - 4px);
-  background: radial-gradient(50% 70% at 50% 30%, rgba(255,255,255,.06), rgba(0,0,0,0) 60%);
-  display: flex;
-}
-
-/* ===== SPINNER: окно-маска + внутренняя лента ===== */
-
-/* окно-маска */
-.spinner{
-  position: absolute; inset: 0;
-  overflow: hidden;           /* важно: прячем ленту за краями */
-  padding: min(14px, 3.5%);
-}
-
-/* лента внутри окна — именно её двигаем */
-@keyframes reel {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(0, -50%, 0); } /* -50%: список удвоен */
-}
-.tape{
-  display: grid;
-  grid-auto-rows: min-content;
-  align-content: start;
-  gap: clamp(8px, calc(var(--card-w, 140px) * .06), 16px);
-  will-change: transform;
-  backface-visibility: hidden;
-  transform: translate3d(0,0,0);
-}
-
-/* быстрее и ровнее */
-.tape[data-spinning="true"]{
-  animation: reel .64s linear infinite;
-}
-
-/* лёгкий motion blur только во время спина */
-.tape[data-spinning="true"] .img{
-  filter: blur(1.4px) brightness(1.05) saturate(1.08);
-}
-
-/* ячейки и размер символов — адаптивно от ширины карты */
-.spin-cell { 
-  width: 100%; 
-  height: clamp(48px, calc(var(--card-w, 140px) * .42), 96px); 
-  display:grid; 
-  place-items:center; 
-}
-.img{
-  width: clamp(44px, calc(var(--card-w, 140px) * .52), 120px);
-  height: auto;
-  object-fit: contain;
-}
-.img.small{
-  width: clamp(36px, calc(var(--card-w, 140px) * .40), 96px);
-  height: auto;
-  opacity: .7;
-}
-
-/* ===== IDLE: показываем ровно 3 символа ===== */
-.idle {
-  position: absolute; inset: 0;
-  display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
   align-items: center;
-  padding: min(10px, 2.8%) 0;
-  pointer-events: none;
+  justify-content: center;
 }
-.idle-cell { display:grid; place-items:center; }
-.idle .mid .img   { filter: none; }
-.idle .top .img,
-.idle .bot .img   { filter: saturate(.9) brightness(.95); }
 
-/* ===== RESULT ===== */
-@keyframes reveal {
-  0% { transform: translateY(100%); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+/* внутренняя «карта» слота, чуть меньше самого контейнера */
+.slot-inner {
+  width: 88%;
+  height: 92%;
+  border-radius: calc(var(--radius, 18px) - 4px);
+  background: radial-gradient(circle at 20% 0%, rgba(255,255,255,0.08), transparent),
+              radial-gradient(circle at 80% 100%, rgba(0,255,140,0.14), transparent),
+              #05070b;
+  box-shadow:
+    inset 0 12px 24px rgba(255,255,255,0.06),
+    inset 0 -18px 26px rgba(0,0,0,0.9);
+  overflow: hidden;
+  position: relative;
 }
-@keyframes pulse {
-  0%, 30% { transform: scale(1) }
-  10%     { transform: scale(1.28) }
+
+/* лента с символами */
+.tape {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+  transform: translate3d(0, 0, 0);
 }
+
+.tape-item {
+  flex: 1 0 33.3333%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.9rem;
+}
+
+/* состояние, когда барабан крутится */
+.tape[data-spinning="true"] {
+  animation: spin 0.9s linear infinite;
+}
+
+/* итоговый символ (после остановки) */
 .revealed {
-  position: absolute; inset: 0;
-  display: grid; place-items: center;
-  padding: min(14px, 3.5%);
-  opacity: 0; transform: translateY(-100%);
-  transition: opacity .22s ease, transform .28s ease;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(4px) scale(0.9);
 }
+
 .revealed[data-revealed="true"] {
-  opacity: 1; transform: translateY(0);
-  animation: reveal .25s cubic-bezier(0.18, 0.89, 0.32, 1.30);
-}
-.revealed[data-good="true"] .img {
-  animation: pulse 2s .25s cubic-bezier(0.04, 1.14, 0.48, 1.63) infinite;
+  animation: reveal 260ms ease-out forwards;
 }
 
-/* маски для глубины */
-.slot::before,
-.slot::after {
-  content: ''; position: absolute; left:0; right:0; height: 22px; pointer-events:none;
+/* победный слот — лёгкое свечение */
+.slot[data-good="true"] .slot-inner {
+  box-shadow:
+    0 0 24px rgba(0, 255, 140, 0.45),
+    inset 0 12px 24px rgba(255,255,255,0.08),
+    inset 0 -18px 26px rgba(0,0,0,0.9);
 }
-.slot::before { top:0;    background: linear-gradient(to bottom, rgba(0,0,0,.35), transparent); }
-.slot::after  { bottom:0; background: linear-gradient(to top,    rgba(0,0,0,.35), transparent); }
 
-/* очень узкие — чуть ужимаем итоговую ширину на стороне слота,
-   но основное управление шириной остаётся в родителе (.slots-stage) */
-@media (max-width: 360px){
-  .slot { width: 30vw; }
+/* ===== АНИМАЦИИ ===== */
+@keyframes spin {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, -50%, 0); }
+}
+
+@keyframes reveal {
+  0%   { opacity: 0; transform: translateY(6px) scale(0.9); }
+  60%  { opacity: 1; transform: translateY(0) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* очень узкие экраны — немного ужимаем ширину барабана,
+   высота сама подстроится из-за aspect-ratio */
+@media (max-width: 360px) {
+  .slot {
+    width: 30vw;
+  }
 }
 
 /* уважение к уменьшению анимаций */
-@media (prefers-reduced-motion: reduce){
-  .tape[data-spinning="true"]{ animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .tape[data-spinning="true"] { animation: none !important; }
   .revealed { transition: none !important; }
   .revealed[data-revealed="true"] { animation: none !important; }
 }
 </style>
+
