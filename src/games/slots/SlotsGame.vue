@@ -53,57 +53,35 @@ const isSpinning = computed<boolean>(() => m.spinning.value)
 </template>
 
 <style scoped>
-/* ====== СЦЕНА СЛОТОВ ====== */
+/* ===== СЦЕНА СЛОТОВ (контейнер игры) ===== */
 .slots-stage {
-  /* Управляющие переменные для размеров слотов */
-  --card-w: clamp(88px, 26vw, 110px);  /* ширина одного барабана */
-  --radius: 18px;
-  --gap: 12px;
-
   width: 100%;
-  max-width: 420px;          /* внутри "телефона" */
+  max-width: 420px;         /* ширина "телефона" */
   margin: 0 auto;
   display: grid;
-  row-gap: var(--gap);
+  row-gap: 16px;
 }
 
-/* ряд барабанов */
+/* рендерим 3 барабана сеткой, каждый занимает свою колонку */
 .reels {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
   align-items: stretch;
-  gap: var(--gap);
 }
 
-/* блок с контролами под барабанами */
+/* контролы под слотом */
 .controls {
+  margin-top: 8px;
   display: flex;
   gap: 8px;
   justify-content: center;
   align-items: center;
 }
 
-/* чуть подтягиваем верха/низа на маленьких экранах */
-@media (max-width: 390px) {
-  .slots-stage {
-    --card-w: clamp(80px, 24vw, 100px);
-    --gap: 10px;
-  }
-}
-
-/* безопасная зона iOS */
-@supports (padding: max(0px)) {
-  .slots-stage {
-    padding-bottom: max(12px, env(safe-area-inset-bottom));
-  }
-}
-
-/* уважение к reduce motion */
-@media (prefers-reduced-motion: reduce) {
+@media (max-width: 360px) {
   .reels {
-    transition: none !important;
+    gap: 10px;
   }
 }
 </style>
-
-
