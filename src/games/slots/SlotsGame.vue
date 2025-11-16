@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useSlotMachine } from './useSlotMachine'
-import ItemPreview from './ui/ItemPreview.vue'
+// import ItemPreview from './ui/ItemPreview.vue'
 import Slot from './ui/Slot.vue'
 import type { SlotItem } from './constants'
 
@@ -22,7 +22,7 @@ const isSpinning = computed<boolean>(() => m.spinning.value)
       <div class="text-sm opacity-70" v-if="isGood">Win!</div>
     </header>
 
-    <ItemPreview :betArray="m.betArray" />
+    <!-- <ItemPreview :betArray="m.betArray" /> -->
 
     <!-- заменено: .slots -> .reels -->
     <div class="reels">
@@ -53,21 +53,22 @@ const isSpinning = computed<boolean>(() => m.spinning.value)
 </template>
 
 <style scoped>
-/* ===== СЦЕНА СЛОТОВ (контейнер игры) ===== */
+/* Вся сцена слотов */
 .slots-stage {
   width: 100%;
-  max-width: 420px;         /* ширина "телефона" */
+  max-width: 420px;        /* внутри "телефона" */
   margin: 0 auto;
   display: grid;
   row-gap: 16px;
 }
 
-/* рендерим 3 барабана сеткой, каждый занимает свою колонку */
+/* Ряд барабанов — 3 слота, равномерно по ширине */
 .reels {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
   align-items: stretch;
+  gap: 8px;
 }
 
 /* контролы под слотом */
@@ -81,7 +82,8 @@ const isSpinning = computed<boolean>(() => m.spinning.value)
 
 @media (max-width: 360px) {
   .reels {
-    gap: 10px;
+    gap: 6px;
   }
 }
 </style>
+

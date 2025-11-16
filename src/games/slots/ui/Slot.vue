@@ -16,38 +16,38 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
 </script>
 
 <template>
-  <div class="slot" :data-good="good" :data-revealed="revealed">
-    <!-- внутренняя карта для красивого «поля» и стабильных отступов -->
-    <div class="card">
-      <!-- Лента: видна только пока крутится и до показа результата -->
-      <div class="spinner" v-show="spinning && !revealed">
-        <div class="tape" :data-spinning="spinning">
-          <div v-for="(it,i) in spinList" :key="i" class="spin-cell">
-            <img class="img" :src="it.image" />
-          </div>
+<div class="slot" :data-good="good" :data-revealed="revealed">
+  <div class="card">
+    <div class="spinner" v-show="spinning && !revealed">
+      <div class="tape" :data-spinning="spinning">
+        <div v-for="(it,i) in spinList" :key="i" class="spin-cell">
+          <img class="img" :src="it.image" />
         </div>
       </div>
+    </div>
 
-      <!-- Idle-трёхрядка: видно, когда не крутится и ещё не показан результат -->
-      <div class="idle" v-show="!spinning && !revealed">
-        <div class="idle-cell top"><img class="img small" :src="item?.image" /></div>
-        <div class="idle-cell mid"><img class="img"       :src="item?.image" /></div>
-        <div class="idle-cell bot"><img class="img small" :src="item?.image" /></div>
-      </div>
+    <div class="idle" v-show="!spinning && !revealed">
+      <div class="idle-cell top"><img class="img small" :src="item?.image" /></div>
+      <div class="idle-cell mid"><img class="img"       :src="item?.image" /></div>
+      <div class="idle-cell bot"><img class="img small" :src="item?.image" /></div>
+    </div>
 
-      <!-- Итоговый символ: виден при revealed -->
-      <div v-if="item" class="revealed" :data-revealed="revealed" :data-good="revealed && good">
-        <img class="img" :src="item.image" :style="{ animationDelay: (index * .25) + 's' }" />
-      </div>
+    <div v-if="item" class="revealed" :data-revealed="revealed" :data-good="revealed && good">
+      <img class="img" :src="item.image" :style="{ animationDelay: (index * .25) + 's' }" />
     </div>
   </div>
+</div>
+
 </template>
 
 <style scoped>
 /* ===== БАРАБАН ===== */
 .slot {
-  width: 100%;
-  aspect-ratio: 100 / 170;           /* примерно как 100x170 */
+  flex: 1 1 0;              /* делим строку на 3 равные части */
+  max-width: 100px;         /* но не больше 100px каждый */
+  aspect-ratio: 9 / 16;
+  margin-inline: auto;
+
   position: relative;
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,.12);
@@ -57,7 +57,7 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
   padding: 4px;
 }
 
-/* внутренняя "карта" */
+/* внутренняя карточка */
 .card {
   width: 100%;
   height: 100%;
@@ -73,7 +73,7 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
   overflow: hidden;
 }
 
-/* общая геометрия для слоёв */
+/* три слоя — спин, статика, результат */
 .spinner,
 .idle,
 .revealed {
@@ -85,30 +85,20 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
   align-items: center;
 }
 
-/* лента при спине */
 .spinner {
   overflow: hidden;
 }
 
-/* лента с символами */
+/* лента при спине */
 .tape {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
   height: 300%;
   width: 100%;
   transform: translate3d(0, 0, 0);
 }
 
-.spin-cell {
-  flex: 0 0 33.3333%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* статика из 3 символов */
+.spin-cell,
 .idle-cell {
   flex: 0 0 33.3333%;
   display: flex;
@@ -132,7 +122,7 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
   animation: reveal 260ms ease-out forwards;
 }
 
-/* пиктограмма */
+/* картинка символа */
 .img {
   max-width: 72%;
   max-height: 72%;
@@ -163,10 +153,10 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
   100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* очень узкие экраны */
+/* очень узкие экраны — слоты поменьше */
 @media (max-width: 360px) {
   .slot {
-    aspect-ratio: 9 / 16;
+    max-width: 90px;
   }
 }
 
