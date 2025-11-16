@@ -15,41 +15,47 @@ const emit = defineEmits<{
 }>()
 
 const router = useRouter()
-function goBack() { router.push('/') }
+function goBack() {
+  // для мини-аппы этого обычно хватает
+  router.back()
+}
 </script>
 
 <template>
-  <div class="min-h-dvh bg-base-100 text-base-content pb-24">
-    <!-- Header -->
+  <div class="min-h-dvh flex flex-col">
+    <!-- HEADER -->
     <header
-      class="sticky top-0 z-40 backdrop-blur-md bg-base-100/80 border-b border-white/10"
+      class="sticky top-0 z-30 bg-base-100/90 backdrop-blur border-b border-white/5"
     >
-      <div class="mx-auto max-w-screen-sm px-4 h-12 flex items-center gap-3">
-        <button class="" @click="goBack">←</button>
-
-        <h1 class="font-semibold text-sm flex-1 truncate">
-          Назад
-        </h1>
-
-        <!-- правый слот: можно передать что-то вроде мини-баланса -->
-        <slot name="right" />
+      <div class="mx-auto w-full max-w-[480px] px-3 py-2 flex items-center gap-2">
+        <button
+          type="button"
+          class="inline-flex items-center gap-1 text-sm opacity-80 hover:opacity-100 transition"
+          @click="goBack"
+        >
+          ← Назад
+        </button>
+        <div class="flex-1" />
       </div>
 
       <LiveTicker v-if="showTicker" />
     </header>
 
-    <!-- Body -->
-    <main class="mx-auto max-w-screen-sm p-4">
-      <div
-        class="rounded-3xl ring-1 ring-white/10 bg-white/5 shadow-xl
-               bg-[radial-gradient(120%_120%_at_0%_100%,rgba(255,255,255,.06),rgba(255,255,255,0)_60%),linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02))]">
-        <div class="p-4 sm:p-6">
+    <!-- MAIN: сам контент игры -->
+    <main class="flex-1 flex justify-center">
+      <div class="w-full max-w-[480px] px-3 pt-3 pb-28">
+        <!-- одна “карта” под игру -->
+        <div
+          class="rounded-3xl border border-white/5 bg-base-200/60
+                 shadow-[0_18px_40px_rgba(0,0,0,0.55)]
+                 p-4"
+        >
           <slot />
         </div>
       </div>
     </main>
 
-    <!-- Универсальное меню (фиксируется снизу) -->
+    <!-- НИЖНИЙ БЛОК -->
     <QuickActions
       v-if="showQuickActions"
       fixed

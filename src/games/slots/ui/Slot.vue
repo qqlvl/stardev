@@ -54,7 +54,7 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
   background: rgba(255,255,255,.04);
   overflow: hidden;
   box-shadow: inset 0 4px 18px rgba(0,0,0,.25);
-  display: grid;
+  display: flex;
   place-items: center;
 }
 
@@ -65,7 +65,7 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
   position: relative;
   border-radius: calc(var(--radius, 16px) - 4px);
   background: radial-gradient(50% 70% at 50% 30%, rgba(255,255,255,.06), rgba(0,0,0,0) 60%);
-  display: grid;
+  display: flex;
 }
 
 /* ===== SPINNER: окно-маска + внутренняя лента ===== */

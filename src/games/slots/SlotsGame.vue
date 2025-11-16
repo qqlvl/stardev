@@ -16,7 +16,7 @@ const isSpinning = computed<boolean>(() => m.spinning.value)
 
 <template>
   <!-- добавлен класс slots-stage -->
-  <section class="slots-stage grid gap-4 pb-28">
+  <section class="slots-stage grid gap-4 pb-24 w-full max-w-[420px] mx-auto">
     <header class="flex items-center justify-between">
       <h2 class="font-semibold">Slots</h2>
       <div class="text-sm opacity-70" v-if="isGood">Win!</div>
@@ -54,48 +54,66 @@ const isSpinning = computed<boolean>(() => m.spinning.value)
 
 <style scoped>
 /* ====== SLOTS SCENE (контейнер экрана) ====== */
-.slots-stage{
-  /* управляемая ширина блока — красиво от 320 до десктопа */
-  --stage-w: clamp(300px, 92vw, 820px);
-  --gap: clamp(8px, 2vw, 18px);
-  --radius: clamp(10px, 16px, 20px);
-  --card-w: clamp(86px, 22vw, 180px); /* ширина одной «карты» барабана */
+.slots-stage {
+  /* базовые переменные размера под телефон */
+  --stage-w: 100%;
+  --gap: 12px;
+  --radius: 18px;
+  --card-w: clamp(90px, 26vw, 120px);
 
-  width: min(100%, var(--stage-w));
+  width: 100%;
   margin-inline: auto;
   display: grid;
   row-gap: var(--gap);
-  padding: clamp(8px, 2vw, 16px);
 }
 
-/* ====== REELS (грид из трёх барабанов) ====== */
-.reels{
+/* заголовок / верхняя часть уже хорошо работает через tailwind в шаблоне */
+
+/* ====== РЯД БАРАБАНОВ ====== */
+.reels {
   display: grid;
-  grid-template-columns: repeat(3, var(--card-w));
-  justify-content: center;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--gap);
+  justify-items: center;
+  align-items: stretch;
+  width: 100%;
 }
 
-/* Узкие телефоны: уменьшаем карты, чтобы всё помещалось */
-@media (max-width: 360px){
-  .slots-stage{ --card-w: 30vw; }
+/* Узкие телефоны: чуть уменьшаем ширину слотов */
+@media (max-width: 360px) {
+  .slots-stage {
+    --card-w: 80px;
+    --gap: 10px;
+  }
 }
 
-/* Широкие: чуть больше «воздуха» */
-@media (min-width: 900px){
-  .slots-stage{ --gap: 20px; }
+/* Чуть больше воздуха на широких (но всё равно в пределах "телефона") */
+@media (min-width: 480px) {
+  .slots-stage {
+    --gap: 14px;
+  }
 }
 
-/* Безопасная зона iOS */
-@supports(padding:max(0px)){
-  .slots-stage{ padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+/* Безопасная зона iOS — можно оставить мягкой */
+@supports(padding: max(0px)) {
+  .slots-stage {
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
 }
 
 /* Уважение к уменьшению анимаций */
-@media (prefers-reduced-motion: reduce){
-  .reels { transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .reels {
+    transition: none !important;
+  }
 }
 
-/* существующее */
-.controls { display:flex; gap:8px; justify-content:center; align-items:center; }
+/* Контролы под слотом */
+.controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
 </style>
+
