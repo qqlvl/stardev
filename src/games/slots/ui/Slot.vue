@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { SLOT_ITEMS, type SlotItem } from '../constants'
 
-defineProps<{
+const props = defineProps<{
   revealed: boolean
   good: boolean
   index: number
@@ -10,41 +10,80 @@ defineProps<{
   spinning: boolean
 }>()
 
-/** базовый набор + его копия → бесшовная прокрутка на -50% */
-const items = computed(() => [...SLOT_ITEMS].sort(() => Math.random() - 0.5))
-const spinList = computed(() => [...items.value, ...items.value])  // ← используем в шаблоне
+/**
+ * Лента символов для спина.
+ * При каждом новом спине (spinning: false → true) порядок меняется.
+ */
+const spinList = computed<SlotItem[]>(() => {
+  // делаем зависимость от props.spinning, чтобы computed
+  // пересчитывался на каждый новый спин
+  props.spinning
+
+  const result: SlotItem[] = []
+  const loops = 3 // сколько "проходов" по символам
+
+  for (let i = 0; i < loops; i++) {
+    const shuffled = [...SLOT_ITEMS].sort(() => Math.random() - 0.5)
+    result.push(...shuffled)
+  }
+
+  // дублируем, чтобы анимация на -50% была бесшовной
+  return [...result, ...result]
+})
 </script>
 
 <template>
-<div class="slot" :data-good="good" :data-revealed="revealed">
-  <div class="card">
-    <div class="spinner" v-show="spinning && !revealed">
-      <div class="tape" :data-spinning="spinning">
-        <div v-for="(it,i) in spinList" :key="i" class="spin-cell">
-          <img class="img" :src="it.image" />
+  <div
+    class="slot"
+    :data-good="good"
+    :data-revealed="revealed"
+    :data-spinning="spinning"
+  >
+    <div class="card">
+      <!-- Лента во время спина -->
+      <div class="spinner" v-show="spinning && !revealed">
+        <div class="tape" :data-spinning="spinning">
+          <div v-for="(it, i) in spinList" :key="i" class="spin-cell">
+            <img class="img" :src="it.image" />
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="idle" v-show="!spinning && !revealed">
-      <div class="idle-cell top"><img class="img small" :src="item?.image" /></div>
-      <div class="idle-cell mid"><img class="img"       :src="item?.image" /></div>
-      <div class="idle-cell bot"><img class="img small" :src="item?.image" /></div>
-    </div>
+      <!-- Статическое состояние (до спина) -->
+      <div class="idle" v-show="!spinning && !revealed">
+        <div class="idle-cell top">
+          <img class="img small" :src="item?.image" />
+        </div>
+        <div class="idle-cell mid">
+          <img class="img" :src="item?.image" />
+        </div>
+        <div class="idle-cell bot">
+          <img class="img small" :src="item?.image" />
+        </div>
+      </div>
 
-    <div v-if="item" class="revealed" :data-revealed="revealed" :data-good="revealed && good">
-      <img class="img" :src="item.image" :style="{ animationDelay: (index * .25) + 's' }" />
+      <!-- Итоговый символ -->
+      <div
+        v-if="item"
+        class="revealed"
+        :data-revealed="revealed"
+        :data-good="revealed && good"
+      >
+        <img
+          class="img"
+          :src="item.image"
+          :style="{ animationDelay: (index * 0.25) + 's' }"
+        />
+      </div>
     </div>
   </div>
-</div>
-
 </template>
 
 <style scoped>
 /* ===== БАРАБАН ===== */
 .slot {
-  flex: 1 1 0;              /* делим строку на 3 равные части */
-  max-width: 100px;         /* но не больше 100px каждый */
+  flex: 1 1 0;
+  max-width: 100px;
   aspect-ratio: 9 / 16;
   margin-inline: auto;
 
@@ -73,6 +112,11 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
   overflow: hidden;
 }
 
+/* стартовый рывок при начале спина */
+.slot[data-spinning="true"] .card {
+  animation: slot-start 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
 /* три слоя — спин, статика, результат */
 .spinner,
 .idle,
@@ -81,12 +125,24 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
   inset: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
 }
 
-.spinner {
-  overflow: hidden;
+/* спин и статика — три ячейки: верх / центр / низ */
+.spinner,
+.idle {
+  justify-content: space-between;
+}
+
+/* итоговый символ — строго по центру */
+.revealed {
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(4px) scale(0.9);
+}
+
+.revealed[data-revealed="true"] {
+  animation: reveal 260ms ease-out forwards;
 }
 
 /* лента при спине */
@@ -98,28 +154,30 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
   transform: translate3d(0, 0, 0);
 }
 
-.spin-cell,
-.idle-cell {
-  flex: 0 0 33.3333%;
+/* ячейки ленты */
+.spin-cell {
+  flex: 0 0 28%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.idle-cell.top,
+.idle-cell {
+  flex: 0 0 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* верх/низ в статике — ближе к центру */
+.idle-cell.top {
+  opacity: 0.6;
+  transform: translateY(10px) scale(0.9);
+}
+
 .idle-cell.bot {
-  opacity: 0.55;
-  transform: scale(0.82);
-}
-
-/* итоговый символ */
-.revealed {
-  opacity: 0;
-  transform: translateY(4px) scale(0.9);
-}
-
-.revealed[data-revealed="true"] {
-  animation: reveal 260ms ease-out forwards;
+  opacity: 0.6;
+  transform: translateY(-10px) scale(0.9);
 }
 
 /* картинка символа */
@@ -129,7 +187,7 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
   display: block;
 }
 
-/* победный слот — свечение */
+/* победный слот — базовое свечение (можно будет усилить) */
 .slot[data-good="true"] .card {
   box-shadow:
     0 0 24px rgba(0, 255, 140, 0.45),
@@ -139,7 +197,10 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
 
 /* ===== АНИМАЦИИ ===== */
 .tape[data-spinning="true"] {
-  animation: spin 0.9s linear infinite;
+  animation: spin 0.3s linear infinite;
+  filter: blur(1px);
+  opacity: 0.8;
+  will-change: transform;
 }
 
 @keyframes spin {
@@ -147,10 +208,48 @@ const spinList = computed(() => [...items.value, ...items.value])  // ← исп
   to   { transform: translate3d(0, -50%, 0); }
 }
 
+/* появление итогового символа */
 @keyframes reveal {
-  0%   { opacity: 0; transform: translateY(6px) scale(0.9); }
-  60%  { opacity: 1; transform: translateY(0) scale(1.02); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.9);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(0) scale(1.06);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(-2px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* стартовый jerk + свет */
+@keyframes slot-start {
+  0% {
+    transform: translateY(0) scale(1);
+    box-shadow:
+      0 0 0 rgba(0, 0, 0, 0),
+      inset 0 12px 24px rgba(255,255,255,0.06),
+      inset 0 -18px 26px rgba(0,0,0,0.9);
+  }
+  40% {
+    transform: translateY(6px) scale(0.98);
+    box-shadow:
+      0 0 20px rgba(255, 255, 255, 0.5),
+      inset 0 16px 28px rgba(255,255,255,0.10),
+      inset 0 -22px 30px rgba(0,0,0,1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    box-shadow:
+      inset 0 12px 24px rgba(255,255,255,0.06),
+      inset 0 -18px 26px rgba(0,0,0,0.9);
+  }
 }
 
 /* очень узкие экраны — слоты поменьше */
