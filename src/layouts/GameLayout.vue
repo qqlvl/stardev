@@ -51,9 +51,9 @@ function goBack() {
                  p-4 glass-card"
                  style="background:
            radial-gradient(140px 140px at 80% 15%, #7C5CFF, transparent),
-           radial-gradient(180px 180px at 10% 90%, #3AC1FF, transparent)"
+           radial-gradient(180px 180px at 10% 90%, #3AC1FF, transparent)">
+          
           <slot />
-        >
         </div>
       </div>
     </main>
