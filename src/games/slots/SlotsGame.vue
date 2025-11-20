@@ -55,11 +55,19 @@ const isSpinning = computed<boolean>(() => m.spinning.value)
           />
           <span class="bet-token"> $</span>
         </div>
-
-        <button class="bet-chip" type="button" @click="m.setWager(m.wager / 2)">
+        <button
+          class="bet-chip"
+          type="button"
+          @click="m.setWager(m.wager.value / 2)"
+        >
           ½
         </button>
-        <button class="bet-chip" type="button" @click="m.setWager(m.wager * 2)">
+
+        <button
+          class="bet-chip"
+          type="button"
+          @click="m.setWager(m.wager.value * 2)"
+        >
           2×
         </button>
       </div>
