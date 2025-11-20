@@ -48,9 +48,12 @@ function goBack() {
         <div
           class="rounded-3xl border border-white/5 bg-base-200/60
                  shadow-[0_18px_40px_rgba(0,0,0,0.55)]
-                 p-4"
-        >
+                 p-4 glass-card"
+                 style="background:
+           radial-gradient(140px 140px at 80% 15%, #7C5CFF, transparent),
+           radial-gradient(180px 180px at 10% 90%, #3AC1FF, transparent)"
           <slot />
+        >
         </div>
       </div>
     </main>
