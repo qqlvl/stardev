@@ -82,7 +82,7 @@ const spinList = computed<SlotItem[]>(() => {
 <style scoped>
 /* ===== БАРАБАН ===== */
 .slot {
-  flex: 1 1 33%;
+  flex: 1 1 34%;
   aspect-ratio: 3 / 5; /* Лучше, чем 9/16, выглядит шире */
   border-radius: 12px;
   overflow: hidden;
