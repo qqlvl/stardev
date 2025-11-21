@@ -44,17 +44,26 @@ function goBack() {
     <!-- MAIN: сам контент игры -->
     <main class="flex-1 flex justify-center">
       <div class="w-full max-w-[480px] px-3 pt-3 pb-28">
-        <!-- одна “карта” под игру -->
-        <div
-          class="rounded-3xl border border-white/5 bg-base-200/60
-                 shadow-[0_18px_40px_rgba(0,0,0,0.55)]
-                 p-4 glass-card"
-                 style="background:
-           radial-gradient(140px 140px at 80% 15%, #7C5CFF, transparent),
-           radial-gradient(180px 180px at 10% 90%, #3AC1FF, transparent)">
-          
-          <slot />
+       <!-- одна “карта” под игру -->
+        <div class="relative rounded-3xl p-4 glass-card overflow-hidden">
+
+          <!-- Градиентный задний фон -->
+          <div
+            class="absolute inset-0 rounded-3xl opacity-20 pointer-events-none"
+            style="
+              background:
+                radial-gradient(140px 140px at 80% 15%, #7C5CFF, transparent),
+                radial-gradient(180px 180px at 10% 90%, #3AC1FF, transparent);
+            "
+          ></div>
+
+          <!-- Контент -->
+          <div class="relative z-10">
+            <slot />
+          </div>
+
         </div>
+
       </div>
     </main>
 

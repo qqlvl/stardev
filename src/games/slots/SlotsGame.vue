@@ -16,9 +16,9 @@ const isSpinning = computed<boolean>(() => m.spinning.value)
 
 <template>
   <!-- добавлен класс slots-stage -->
-  <section class="slots-stage grid gap-4 pb-24 w-full max-w-[420px] mx-auto">
-    <header class="flex items-center justify-between">
-      <h2 class="font-semibold">Slots</h2>
+  <section class="slots-stage grid gap-2 pb-2 w-full max-w-[420px] mx-auto">
+    <header class="flex items-center justify-center">
+      <h2 class="font-semibold tracking-tight text-iridescent">SLOTS</h2>
       <div class="text-sm opacity-70" v-if="isGood">Win!</div>
     </header>
 

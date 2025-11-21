@@ -82,9 +82,10 @@ const spinList = computed<SlotItem[]>(() => {
 <style scoped>
 /* ===== БАРАБАН ===== */
 .slot {
-  flex: 1 1 0;
-  max-width: 100px;
-  aspect-ratio: 9 / 16;
+  flex: 1 1 33%;
+  aspect-ratio: 3 / 5; /* Лучше, чем 9/16, выглядит шире */
+  border-radius: 12px;
+  overflow: hidden;
   margin-inline: auto;
 
   position: relative;
@@ -93,7 +94,6 @@ const spinList = computed<SlotItem[]>(() => {
   background: rgba(0, 0, 0, 0.35);
   overflow: hidden;
   box-shadow: inset 0 4px 18px rgba(0,0,0,.45);
-  padding: 4px;
 }
 
 /* внутренняя карточка */
