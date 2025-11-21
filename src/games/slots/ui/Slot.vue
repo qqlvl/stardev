@@ -20,7 +20,7 @@ const spinList = computed<SlotItem[]>(() => {
   props.spinning
 
   const result: SlotItem[] = []
-  const loops = 12 // длиннее лента, меньше ощущение повтора
+  const loops = 16 // ещё длиннее лента, чтобы практически не ловить повтор
 
   for (let i = 0; i < loops; i++) {
     const shuffled = [...SLOT_ITEMS].sort(() => Math.random() - 0.5)
@@ -40,6 +40,8 @@ watch(
       // стартуем анимацию с произвольного смещения, чтобы лента не казалась одинаковой
       const offset = -(Math.random() * 50)
       spinOffset.value = `${offset}%`
+      // убираем задержку старта для синхронного запуска барабанов
+      document.documentElement.style.setProperty('--spin-delay-global', '0ms')
     }
   },
 )
@@ -58,7 +60,7 @@ watch(
         <div
           class="tape"
           :data-spinning="spinning"
-          :style="{ '--spin-offset': spinOffset, '--spin-delay': (index * 20) + 'ms' }"
+          :style="{ '--spin-offset': spinOffset, '--spin-delay': '0ms' }"
         >
           <div v-for="(it, i) in spinList" :key="i" class="spin-cell">
             <img class="img" :src="it.image" />
@@ -166,7 +168,7 @@ watch(
 .tape {
   display: flex;
   flex-direction: column;
-  height: 300%;
+  height: 400%;
   width: 100%;
   transform: translate3d(0, var(--spin-offset, 0%), 0);
 }
@@ -228,7 +230,7 @@ watch(
 
 /* ===== АНИМАЦИИ ===== */
 .tape[data-spinning="true"] {
-  animation: spin 0.4s linear infinite;
+  animation: spin 0.8s linear infinite;
   animation-delay: var(--spin-delay, 0ms);
   filter: blur(0.5px);
   opacity: 0.82;
@@ -237,7 +239,7 @@ watch(
 
 @keyframes spin {
   from { transform: translate3d(0, var(--spin-offset, 0%), 0); }
-  to   { transform: translate3d(0, calc(-50% + var(--spin-offset, 0%)), 0); }
+  to   { transform: translate3d(0, calc(-100% + var(--spin-offset, 0%)), 0); }
 }
 
 @keyframes slot-reveal-card {
