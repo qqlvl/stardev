@@ -1,3 +1,12 @@
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+function goProfile() {
+  router.push('/profile')
+}
+</script>
+
 <template>
   <div class="relative glass-card p-4 overflow-hidden">
     <div class="absolute inset-0 rounded-2xl opacity-20 pointer-events-none"
@@ -8,7 +17,7 @@
 
     <div class="flex items-center justify-between mb-1">
       <div class="text-5xl font-extrabold tracking-tight text-iridescent">STAR</div>
-        <button class="btn btn-xs btn-ghost">
+        <button class="btn btn-xs btn-ghost" @click="goProfile">
           <img src="/src/assets/img/user.svg" alt="user" class="w-7 h-7" />
         </button>
     </div>
