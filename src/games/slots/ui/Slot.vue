@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { SLOT_ITEMS, type SlotItem } from '../constants'
 
 const props = defineProps<{
@@ -20,7 +20,7 @@ const spinList = computed<SlotItem[]>(() => {
   props.spinning
 
   const result: SlotItem[] = []
-  const loops = 3 // сколько "проходов" по символам
+  const loops = 12 // длиннее лента, меньше ощущение повтора
 
   for (let i = 0; i < loops; i++) {
     const shuffled = [...SLOT_ITEMS].sort(() => Math.random() - 0.5)
@@ -30,6 +30,19 @@ const spinList = computed<SlotItem[]>(() => {
   // дублируем, чтобы анимация на -50% была бесшовной
   return [...result, ...result]
 })
+
+const spinOffset = ref('0%')
+
+watch(
+  () => props.spinning,
+  (val) => {
+    if (val) {
+      // стартуем анимацию с произвольного смещения, чтобы лента не казалась одинаковой
+      const offset = -(Math.random() * 50)
+      spinOffset.value = `${offset}%`
+    }
+  },
+)
 </script>
 
 <template>
@@ -42,7 +55,11 @@ const spinList = computed<SlotItem[]>(() => {
     <div class="card">
       <!-- Лента во время спина -->
       <div class="spinner" v-show="spinning && !revealed">
-        <div class="tape" :data-spinning="spinning">
+        <div
+          class="tape"
+          :data-spinning="spinning"
+          :style="{ '--spin-offset': spinOffset, '--spin-delay': (index * 20) + 'ms' }"
+        >
           <div v-for="(it, i) in spinList" :key="i" class="spin-cell">
             <img class="img" :src="it.image" />
           </div>
@@ -151,7 +168,7 @@ const spinList = computed<SlotItem[]>(() => {
   flex-direction: column;
   height: 300%;
   width: 100%;
-  transform: translate3d(0, 0, 0);
+  transform: translate3d(0, var(--spin-offset, 0%), 0);
 }
 
 /* ячейки ленты */
@@ -211,15 +228,16 @@ const spinList = computed<SlotItem[]>(() => {
 
 /* ===== АНИМАЦИИ ===== */
 .tape[data-spinning="true"] {
-  animation: spin 0.3s linear infinite;
-  filter: blur(1px);
-  opacity: 0.8;
+  animation: spin 0.4s linear infinite;
+  animation-delay: var(--spin-delay, 0ms);
+  filter: blur(0.5px);
+  opacity: 0.82;
   will-change: transform;
 }
 
 @keyframes spin {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(0, -50%, 0); }
+  from { transform: translate3d(0, var(--spin-offset, 0%), 0); }
+  to   { transform: translate3d(0, calc(-50% + var(--spin-offset, 0%)), 0); }
 }
 
 @keyframes slot-reveal-card {
