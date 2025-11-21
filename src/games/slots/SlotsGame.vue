@@ -216,11 +216,11 @@ async function handleSpin() {
 
 .bet-card {
   border-radius: 20px;
-  padding: 8px;
-  background: rgba(8, 8, 17, 0.9);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  background: transparent;
+  border: none;
+  box-shadow: none;
   width: 100%;
-  max-width: 360px;
+  max-width: 540px;
 }
 
 .bet-inner {
@@ -229,9 +229,11 @@ async function handleSpin() {
   gap: 8px;
   padding: 8px 8px;
   border-radius: 16px;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
   width: 100%;
-  max-width: 340px;
+  max-width: 520px;
   margin: 0 auto;
 }
 
@@ -277,7 +279,7 @@ async function handleSpin() {
   font-size: 16px;
   font-weight: 800;
   color: #fff;
-  padding: 4px 0 4px 24px;
+  padding: 10px 8px 10px 28px;
   width: 50px;
 }
 
@@ -328,10 +330,10 @@ async function handleSpin() {
 
 .bet-chips {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
   width: 100%;
-  max-width: 520px;
+  max-width: 360px;
   margin: 0 auto;
 }
 
