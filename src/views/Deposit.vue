@@ -19,8 +19,6 @@ const depositNote = ref<string>('После оплаты проверь стат
 const withdrawCurrency = ref<Currency>(currencies[0])
 const withdrawAmount = ref<string>('25.00')
 const withdrawAddress = ref<string>('')
-const withdrawNote = ref<string>('Вывод подтверждается вручную. Срок зависит от загруженности сети.')
-
 function goHome() {
   router.push({ name: 'home' })
 }
@@ -191,9 +189,6 @@ function handleWithdraw() {
           <div class="text-[11px] text-white/65 leading-snug flex items-start gap-1.5">
             <span>⚠️</span>
             <span>Указывайте адрес точно — переводы необратимы.</span>
-          </div>
-          <div class="text-[11px] text-white/60 leading-snug">
-            {{ withdrawNote }}
           </div>
         </div>
       </section>
