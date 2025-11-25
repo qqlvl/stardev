@@ -5,6 +5,9 @@ const router = useRouter()
 function goProfile() {
   router.push('/profile')
 }
+function goDeposit() {
+  router.push({ name: 'deposit' })
+}
 </script>
 
 <template>
@@ -34,6 +37,7 @@ function goProfile() {
       :initial="{ scale: 1 }"
       :hovered="{ scale: 1.02 }"
       :pressed="{ scale: 0.98 }"
+      @click="goDeposit"
     >
       <span class="relative z-10">Депозит</span>
       <!-- отдельный слой для блика -->
