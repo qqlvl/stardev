@@ -2,6 +2,8 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import LiveTicker from '@/components/LiveTicker.vue'
+import QuickActions from '@/components/QuickActions.vue'
+import type { QAKey } from '../types/quickActions'
 
 type Quest = {
   id: string
@@ -15,6 +17,7 @@ const balance = ref(114.05)
 const level = ref(7)
 const xp = ref(1350)
 const nextLevelXp = ref(2000)
+const qa = ref<QAKey>('profile')
 const quests = ref<Quest[]>([
   { id: 'daily', title: 'Ежедневный бонус', reward: '+10 STAR', done: false },
   { id: 'matches', title: 'Сыграй 3 матча', reward: '+25 XP', done: true },
@@ -35,8 +38,14 @@ const referral = ref({
 })
 
 const router = useRouter()
-function goBack() {
-  router.back()
+function goHome() {
+  router.push({ name: 'home' })
+}
+function goProfile() {
+  router.push({ name: 'profile' })
+}
+function goDeposit() {
+  router.push({ name: 'deposit' })
 }
 
 const initials = computed(() => {
@@ -69,13 +78,6 @@ onMounted(() => {
   <div data-theme="star-dark" class="min-h-dvh bg-base-100 text-base-content">
     <header class="sticky top-0 z-30 bg-base-100/90 backdrop-blur border-b border-white/5">
       <div class="mx-auto w-full max-w-[540px] px-4 py-3 flex items-center gap-3">
-        <button
-          type="button"
-          class="inline-flex items-center gap-1 text-sm opacity-80 hover:opacity-100 transition"
-          @click="goBack"
-        >
-          ← Назад
-        </button>
         <div class="text-lg font-semibold">Профиль</div>
         <div class="flex-1" />
         <button class="btn btn-xs btn-ghost">Поделиться</button>
@@ -230,5 +232,13 @@ onMounted(() => {
         </div>
       </section>
     </main>
+
+    <QuickActions
+      v-model="qa"
+      fixed
+      @games="goHome"
+      @deposit="goDeposit"
+      @profile="goProfile"
+    />
   </div>
 </template>

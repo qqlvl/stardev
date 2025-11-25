@@ -1,12 +1,14 @@
-<script setup lang="ts"> import { onMounted, ref } from 'vue' 
-import LiveTicker from './components/LiveTicker.vue' 
-import BalanceCard from './components/BalanceCard.vue' 
-import QuickActions, { type QAKey } from './components/QuickActions.vue'
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import LiveTicker from './components/LiveTicker.vue'
+import BalanceCard from './components/BalanceCard.vue'
+import QuickActions from './components/QuickActions.vue'
+import type { QAKey } from './types/quickActions'
 import GamesGrid from './components/GamesGrid.vue'
 
-
-import slotsPng   from './assets/img/games/slots.png'
-import soonPng   from './assets/img/games/soon.png'
+import slotsPng from './assets/img/games/slots.png'
+import soonPng from './assets/img/games/soon.png'
 
 type Game = {
   id: string
@@ -19,7 +21,8 @@ type Game = {
 
 const platform = ref('not-telegram')
 const user = ref<{ first_name?: string; username?: string } | null>(null)
-const qa = ref<QAKey | null>(null)
+const qa = ref<QAKey>('games')
+const router = useRouter()
 
 /** ВАЖНО: id должны быть уникальны, иначе будут конфликты ключей в v-for */
 const games = ref<Game[]>([
@@ -36,12 +39,14 @@ function play(g: Game) {
   window.location.href = g.playUrl ?? `/play/${g.id}`
 }
 
-function onBonus() { /* TODO */ }
-function onReferrals() { /* TODO */ }
-function onChat() {
-  const tg = (window as any).Telegram?.WebApp
-  const url = 'https://t.me/your_chat_here'
-  tg?.openTelegramLink ? tg.openTelegramLink(url) : window.open(url, '_blank')
+function onGames() {
+  router.push({ name: 'home' })
+}
+function onDeposit() {
+  router.push({ name: 'deposit' })
+}
+function onProfile() {
+  router.push({ name: 'profile' })
 }
 
 onMounted(() => {
@@ -67,6 +72,6 @@ onMounted(() => {
       </section>
     </main>
 
-    <QuickActions v-model="qa" fixed @bonus="onBonus" @referrals="onReferrals" @chat="onChat" />
+    <QuickActions v-model="qa" fixed @games="onGames" @deposit="onDeposit" @profile="onProfile" />
   </div>
 </template>

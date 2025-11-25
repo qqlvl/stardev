@@ -1,4 +1,10 @@
-<!-- src/App.vue -->
+<script setup lang="ts">
+import { ref } from 'vue'
+import AppLoader from './components/AppLoader.vue'
+
+const isLoading = ref(false) // временно отключили лоадер
+</script>
+
 <template>
   <div
     data-theme="star-dark"
@@ -8,5 +14,6 @@
       <router-view />
     </div>
   </div>
-</template>
 
+  <AppLoader :show="isLoading" />
+</template>

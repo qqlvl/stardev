@@ -1,113 +1,216 @@
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue'
+import type { QAKey } from '../types/quickActions'
+export type { QAKey } from '../types/quickActions'
+
+const props = withDefaults(defineProps<{
+  modelValue?: QAKey | null
+  fixed?: boolean
+}>(), {
+  modelValue: null,
+  fixed: false,
+})
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', v: QAKey | null): void
+  (e: 'games'): void
+  (e: 'deposit'): void
+  (e: 'profile'): void
+}>()
+
+type IconName = 'home' | 'wallet' | 'user'
+
+const items: Array<{ key: QAKey; label: string; icon: IconName }> = [
+  { key: 'games', label: 'Игры', icon: 'home' },
+  { key: 'deposit', label: 'Депозит', icon: 'wallet' },
+  { key: 'profile', label: 'Профиль', icon: 'user' },
+]
+
+const innerActive = ref<QAKey>('games')
+
+watch(
+  () => props.modelValue,
+  (val) => {
+    if (val) innerActive.value = val
+  },
+  { immediate: true },
+)
+
+const activeKey = computed<QAKey>(() => props.modelValue ?? innerActive.value)
+
+function onPick(key: QAKey) {
+  innerActive.value = key
+  emit('update:modelValue', key)
+  if (key === 'games') emit('games')
+  else if (key === 'deposit') emit('deposit')
+  else emit('profile')
+}
+
+function iconPath(name: IconName) {
+  switch (name) {
+    case 'home':
+      return 'M4 11.5 12 5l8 6.5V19H4z M10 19v-4.5a2 2 0 1 1 4 0V19'
+    case 'wallet':
+      return 'M5 7a2 2 0 012-2h12v4h-3.5a2.5 2.5 0 000 5H19v4H7a2 2 0 01-2-2z M14.5 13.5h3'
+    case 'user':
+      return 'M12 12a4 4 0 100-8 4 4 0 000 8zm-6 6a6 6 0 1112 0v1H6z'
+  }
+}
+</script>
+
 <template>
-  <!-- wrapper: фиксированный низ (если fixed) или встроенный блок -->
   <div
-    :class="[fixed ? 'fixed left-0 right-0 bottom-0 z-40' : 'relative', 'px-4']"
+    :class="[fixed ? 'fixed left-0 right-0 bottom-0 z-40' : 'relative', 'px-4 flex justify-center']"
     style="padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px)"
   >
-    <!-- баннер -->
-    <div
-      class="mx-auto max-w-screen-sm rounded-3xl overflow-hidden shadow-xl
-             ring-1 ring-white/10
-             bg-[radial-gradient(120%_120%_at_0%_100%,rgba(255,255,255,0.06),rgba(255,255,255,0)_60%),linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] backdrop-blur-md"
-    >
-      <!-- верхняя полоска-акцент -->
-      <div class="h-1.5 bg-gradient-to-r from-indigo-400/80 via-fuchsia-400/80 to-amber-300/80"></div>
-
-      <!-- контент баннера -->
-      <div class="px-3 py-3 sm:px-4 sm:py-4">
-        <!-- кнопки -->
-        <div class="grid grid-cols-3 gap-2 sm:gap-3">
-          <!-- Бонус -->
-          <button
-            :class="btnClass('bonus')"
-            @click="onPick('bonus'); emit('bonus')"
-            aria-label="Ежедневный бонус"
-          >
-            <span class="icon-wrap">
-              <svg viewBox="0 0 24 24" class="icon">
-                <path fill="currentColor" d="M12 2a5 5 0 015 5v1h1a3 3 0 013 3v2a7 7 0 01-7 7h-4a7 7 0 01-7-7V11a3 3 0 013-3h1V7a5 5 0 015-5m-3 5a3 3 0 016 0v1H9z"/>
-              </svg>
-            </span>
-            <span class="label">Бонус</span>
-          </button>
-
-          <!-- Рефералы -->
-          <button
-            :class="btnClass('referrals')"
-            @click="onPick('referrals'); emit('referrals')"
-            aria-label="Реферальная программа"
-          >
-            <span class="icon-wrap">
-              <svg viewBox="0 0 24 24" class="icon">
-                <path fill="currentColor" d="M12 12a5 5 0 10-5-5a5 5 0 005 5m-7 9a7 7 0 0114 0v1H5z"/>
-              </svg>
-            </span>
-            <span class="label">Рефералы</span>
-          </button>
-
-          <!-- Чат -->
-          <button
-            :class="btnClass('chat')"
-            @click="onPick('chat'); emit('chat')"
-            aria-label="Открыть чат"
-          >
-            <span class="icon-wrap">
-              <svg viewBox="0 0 24 24" class="icon">
-                <path fill="currentColor" d="M12 3a9 9 0 019 9a9 9 0 01-9 9a8.9 8.9 0 01-3.9-.9L3 21l.9-5A9 9 0 0112 3z"/>
-              </svg>
-            </span>
-            <span class="label">Чат</span>
-          </button>
-        </div>
+    <div class="nav-shell">
+      <div class="nav-blur" />
+      <div class="nav-inner">
+        <button
+          v-for="item in items"
+          :key="item.key"
+          type="button"
+          :class="['nav-btn', activeKey === item.key && 'is-active']"
+          @click="onPick(item.key)"
+          :aria-label="item.label"
+        >
+          <span class="icon-wrap" :data-key="item.key">
+            <svg viewBox="0 0 24 24" class="icon">
+              <path :d="iconPath(item.icon)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-export type QAKey = 'bonus' | 'referrals' | 'chat'
-
-const props = defineProps<{
-  modelValue: QAKey | null
-  fixed?: boolean
-}>()
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', v: QAKey | null): void
-  (e: 'bonus'): void
-  (e: 'referrals'): void
-  (e: 'chat'): void
-}>()
-
-function onPick(key: QAKey) {
-  emit('update:modelValue', key)
-  // авто-сброс подсветки
-  setTimeout(() => emit('update:modelValue', null), 200)
-}
-
-function btnClass(key: QAKey) {
-  const isActive = props.modelValue === key
-  return [
-    'btn-glass-outline',
-    'group flex flex-col items-center justify-center gap-1 rounded-2xl py-3 sm:py-4',
-    'ring-1 ring-white/10',
-    'bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors',
-    'text-sm font-semibold',
-    isActive && 'btn-glass-outline outline outline-2 outline-offset-2 outline-white/25',
-  ]
-}
-</script>
-
 <style scoped>
+.nav-shell {
+  position: relative;
+  margin: 0 auto;
+  max-width: 460px;
+  padding: 10px 12px;
+  border-radius: 26px;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+  transform: translateY(-6px); /* приподнимаем панель от нижнего края */
+}
+
+.nav-blur {
+  position: absolute;
+  inset: 0;
+  border-radius: 26px;
+  background: linear-gradient(120deg, rgba(124, 92, 255, 0.18), rgba(58, 193, 255, 0.12));
+  filter: blur(16px);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.nav-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 70px);
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 22px;
+  background: rgba(20, 22, 32, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+  min-height: 60px;
+}
+
+.nav-btn {
+  position: relative;
+  width: 70px;
+  height: 64px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.72);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  text-align: center;
+  transition:
+    transform 120ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    filter 180ms ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.nav-btn:not(.is-active) .icon {
+  opacity: 0.65;
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.nav-btn:active {
+  transform: scale(0.96);
+}
+
+.nav-btn.is-active {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+  color: #ffffff;
+  box-shadow:
+    inset 0 0 12px rgba(255, 255, 255, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    0 10px 30px rgba(90, 200, 255, 0.2);
+}
+
+.nav-btn.is-active::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0));
+  opacity: 0.55;
+  pointer-events: none;
+}
+
 .icon-wrap {
-  @apply size-9 sm:size-10 rounded-xl grid place-items-center bg-white/10 ring-1 ring-white/15;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  transition: transform 160ms ease, filter 160ms ease;
 }
+
 .icon {
-  width: 18px;
-  height: 18px;
-  opacity: .9;
+  width: 32px;
+  height: 32px;
 }
-.label {
-  @apply text-xs sm:text-sm;
+
+@media (max-width: 420px) {
+  .nav-btn {
+    height: 56px;
+  }
 }
 </style>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { onMounted, shallowRef, markRaw } from 'vue'  // ⬅️ вместо ref
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import GameLayout from '@/layouts/GameLayout.vue'
 import { gamesRegistry } from '../games'
 
 const route = useRoute()
+const router = useRouter()
 const id = String(route.params.id)
 
 const Comp = shallowRef<any>(null)   // ⬅️ shallowRef
@@ -22,9 +23,15 @@ onMounted(async () => {
 })
 
 // заглушки под действия QuickActions
-function onBonus() {}
-function onReferrals() {}
-function onChat() {}
+function onGames() {
+  router.push({ name: 'home' })
+}
+function onDeposit() {
+  router.push({ name: 'deposit' })
+}
+function onProfile() {
+  router.push({ name: 'profile' })
+}
 </script>
 
 <template>
@@ -32,9 +39,9 @@ function onChat() {}
     :title="id"
     :showTicker="true"
     :showQuickActions="true"
-    @bonus="onBonus"
-    @referrals="onReferrals"
-    @chat="onChat"
+    @games="onGames"
+    @deposit="onDeposit"
+    @profile="onProfile"
   >
     <div v-if="error" class="text-red-400">{{ error }}</div>
 
