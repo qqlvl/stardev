@@ -77,11 +77,6 @@ onMounted(() => {
 <template>
   <div data-theme="star-dark" class="min-h-dvh bg-base-100 text-base-content">
     <header class="sticky top-0 z-30 bg-base-100/90 backdrop-blur border-b border-white/5">
-      <div class="mx-auto w-full max-w-[540px] px-4 py-3 flex items-center gap-3">
-        <div class="text-lg font-semibold">Профиль</div>
-        <div class="flex-1" />
-        <button class="btn btn-xs btn-ghost">Поделиться</button>
-      </div>
       <LiveTicker />
     </header>
 

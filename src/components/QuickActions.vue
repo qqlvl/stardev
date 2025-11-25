@@ -95,7 +95,7 @@ function iconPath(name: IconName) {
   overflow: visible;
   display: flex;
   justify-content: center;
-  transform: translateY(-6px); /* приподнимаем панель от нижнего края */
+  transform: translateY(-12px); /* приподнимаем панель от нижнего края */
 }
 
 .nav-blur {
@@ -116,7 +116,7 @@ function iconPath(name: IconName) {
   justify-content: center;
   justify-items: center;
   gap: 8px;
-  padding: 10px 12px;
+  padding: 8px 10px;
   border-radius: 22px;
   background: rgba(20, 22, 32, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.07);
@@ -134,9 +134,9 @@ function iconPath(name: IconName) {
 .nav-btn {
   position: relative;
   width: 70px;
-  height: 64px;
+  height: 56px;
   border: none;
-  border-radius: 16px;
+  border-radius: 15px;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.03);
   color: rgba(255, 255, 255, 0.72);
@@ -156,6 +156,20 @@ function iconPath(name: IconName) {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
+}
+
+.nav-btn[data-key="deposit"] {
+  box-shadow:
+    0 12px 28px rgba(90, 200, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-btn[data-key="deposit"].is-active {
+  box-shadow:
+    0 14px 34px rgba(90, 200, 255, 0.35),
+    inset 0 0 12px rgba(255, 255, 255, 0.14),
+    0 0 0 1px rgba(255, 255, 255, 0.25);
 }
 
 .nav-btn:not(.is-active) .icon {
@@ -192,8 +206,8 @@ function iconPath(name: IconName) {
 }
 
 .icon-wrap {
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -204,13 +218,13 @@ function iconPath(name: IconName) {
 }
 
 .icon {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
 }
 
 @media (max-width: 420px) {
   .nav-btn {
-    height: 56px;
+    height: 52px;
   }
 }
 </style>
