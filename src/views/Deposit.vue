@@ -19,6 +19,13 @@ const depositNote = ref<string>('После оплаты проверь стат
 const withdrawCurrency = ref<Currency>(currencies[0])
 const withdrawAmount = ref<string>('25.00')
 const withdrawAddress = ref<string>('')
+const withdrawOpen = ref(false)
+
+const history = ref([
+  { id: 1, type: 'deposit', amount: 50, currency: 'USDT', status: 'completed', date: 'Сегодня, 12:20' },
+  { id: 2, type: 'withdraw', amount: 25, currency: 'USDT', status: 'pending', date: 'Вчера, 18:05' },
+  { id: 3, type: 'deposit', amount: 100, currency: 'TON', status: 'completed', date: 'Вчера, 10:12' },
+])
 function goHome() {
   router.push({ name: 'home' })
 }
@@ -81,10 +88,7 @@ function handleWithdraw() {
         />
         <div class="relative z-10 space-y-3">
           <div class="flex items-center justify-between gap-3">
-            <div>
-              <div class="text-sm text-white/70">Внести через CryptoBot</div>
-              <div class="text-xl font-semibold">Крипто депозит</div>
-            </div>
+            <div class="text-xl font-extrabold">Депозит</div>
             <div class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 border border-white/10 text-xs">
               <span class="opacity-70">Валюта</span>
               <select v-model="depositCurrency" class="bg-transparent outline-none">
@@ -144,10 +148,9 @@ function handleWithdraw() {
           "
         />
         <div class="relative z-10 space-y-3">
-          <div class="flex items-center justify-between gap-3">
-            <div>
-              <div class="text-sm text-white/70">Запросить</div>
-              <div class="text-xl font-semibold">Вывод средств</div>
+          <button type="button" class="w-full flex items-center gap-3 text-left collapse-btn" @click="withdrawOpen = !withdrawOpen">
+            <div class="flex-1">
+              <div class="text-xl font-extrabold">Вывод средств</div>
             </div>
             <div class="inline-flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2 border border-white/10 text-xs">
               <span class="opacity-70">Валюта</span>
@@ -155,40 +158,77 @@ function handleWithdraw() {
                 <option v-for="c in currencies" :key="c" :value="c">{{ c }}</option>
               </select>
             </div>
-          </div>
-
-          <div class="grid grid-cols-1 gap-3">
-            <div class="space-y-1">
-              <div class="text-xs text-white/70">Сумма ({{ withdrawCurrency }})</div>
-              <input
-                v-model="withdrawAmount"
-                type="number"
-                min="0"
-                step="0.01"
-                class="w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 text-lg font-semibold outline-none"
-                inputmode="decimal"
-                @input="onInputAmount('withdraw', $event)"
-                placeholder="0.00"
-              />
-            </div>
-            <div class="space-y-1">
-              <div class="text-xs text-white/70">Адрес / кошелёк</div>
-              <input
-                v-model="withdrawAddress"
-                type="text"
-                class="w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 text-sm outline-none"
-                placeholder="Введите адрес USDT (TRC20 / ERC20)"
-              />
-            </div>
-          </div>
-
-          <button type="button" class="btn btn-glass-outline w-full rounded-xl py-3 withdraw-btn" @click="handleWithdraw">
-            Отправить запрос
+            <span class="chevron" :class="{ open: withdrawOpen }">⌄</span>
           </button>
 
-          <div class="text-[11px] text-white/65 leading-snug flex items-start gap-1.5">
-            <span>⚠️</span>
-            <span>Указывайте адрес точно — переводы необратимы.</span>
+          <transition name="fade-collapse">
+            <div v-show="withdrawOpen" class="space-y-3">
+              <div class="grid grid-cols-1 gap-3">
+                <div class="space-y-1">
+                  <div class="text-xs text-white/70">Сумма ({{ withdrawCurrency }})</div>
+                  <input
+                    v-model="withdrawAmount"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    class="w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 text-lg font-semibold outline-none"
+                    inputmode="decimal"
+                    @input="onInputAmount('withdraw', $event)"
+                    placeholder="0.00"
+                  />
+                </div>
+                <div class="space-y-1">
+                  <div class="text-xs text-white/70">Адрес / кошелёк</div>
+                  <input
+                    v-model="withdrawAddress"
+                    type="text"
+                    class="w-full rounded-xl bg-white/5 border border-white/10 px-3 py-2 text-sm outline-none"
+                    placeholder="Введите адрес USDT (TRC20 / ERC20)"
+                  />
+                </div>
+              </div>
+
+              <button type="button" class="btn btn-glass-outline w-full rounded-xl py-3 withdraw-btn" @click="handleWithdraw">
+                Отправить запрос
+              </button>
+
+              <div class="text-[11px] text-white/65 leading-snug flex items-start gap-1.5">
+                <span>⚠️</span>
+                <span>Указывайте адрес точно — переводы необратимы.</span>
+              </div>
+            </div>
+          </transition>
+        </div>
+      </section>
+      <section class="history-card glass-card p-4 relative overflow-hidden">
+        <div class="absolute inset-0 rounded-2xl opacity-10 pointer-events-none"
+          style="
+            background:
+              radial-gradient(140px 140px at 80% 15%, #7C5CFF, transparent),
+              radial-gradient(200px 200px at 10% 90%, #3AC1FF, transparent);
+          "
+        />
+        <div class="relative z-10 space-y-3">
+          <div class="text-lg font-semibold">История</div>
+          <div class="space-y-2">
+            <div
+              v-for="item in history"
+              :key="item.id"
+              class="history-row"
+              :data-type="item.type"
+              :data-status="item.status"
+            >
+              <span class="pill" :class="item.type === 'deposit' ? 'pill-green' : 'pill-blue'">
+                {{ item.type === 'deposit' ? 'Депозит' : 'Вывод' }}
+              </span>
+              <div class="amount">
+                {{ item.amount.toFixed(2) }} {{ item.currency }}
+              </div>
+              <span class="date">{{ item.date }}</span>
+              <span class="status-icon" :class="item.status" aria-hidden="true">
+                {{ item.status === 'completed' ? '✓' : '⏳' }}
+              </span>
+            </div>
           </div>
         </div>
       </section>
@@ -296,5 +336,96 @@ input[type='number'] {
 
 .withdraw-btn:active {
   transform: scale(0.96);
+}
+
+.collapse-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 2px;
+  border: none;
+  background: transparent;
+  transition: transform 150ms ease, opacity 150ms ease;
+}
+
+.collapse-btn:active {
+  transform: scale(0.98);
+}
+
+.chevron {
+  font-size: 16px;
+  opacity: 0.8;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+.fade-collapse-enter-from,
+.fade-collapse-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+.fade-collapse-enter-active,
+.fade-collapse-leave-active {
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.history-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.history-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  width: 70px;
+  text-align: center;
+}
+.pill-green { background: rgba(76, 217, 123, 0.18); color: #c5ffdf; }
+.pill-blue { background: rgba(92, 180, 255, 0.18); color: #cde8ff; }
+
+.amount {
+  font-weight: 700;
+  font-size: 14px;
+  min-width: 70px;
+}
+
+.status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+}
+.status-icon.completed { background: rgba(76, 217, 123, 0.18); color: #9effc2; }
+.status-icon.pending { background: rgba(255, 212, 138, 0.18); color: #ffd48a; }
+
+.date {
+  opacity: 0.7;
+  min-width: 108px;
+  font-size: 12px;
+  text-align: right;
 }
 </style>

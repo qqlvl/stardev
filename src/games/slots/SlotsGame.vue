@@ -57,7 +57,10 @@ async function handleSpin() {
     <section class="slots-card">
       <!-- Заголовок -->
       <header class="slots-header">
-        <h1 class="slots-title text-iridescent">SLOTS</h1>
+        <div class="slots-header-row">
+          <h1 class="slots-title text-iridescent">SLOTS</h1>
+          <div class="balance-pill">${{ fakeBalance.toFixed(2) }}</div>
+        </div>
       </header>
 
       <!-- БАРАБАНЫ -->
@@ -170,6 +173,14 @@ async function handleSpin() {
   margin: 0 0 12px;
 }
 
+.slots-header-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
 .slots-title {
   font-size: 18px;
   letter-spacing: 0.22em;
@@ -177,6 +188,15 @@ async function handleSpin() {
   font-weight: 900;
 }
 
+.balance-pill {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0.7;
+}
 /* Барабаны */
 .reels-wrap {
   display: flex;

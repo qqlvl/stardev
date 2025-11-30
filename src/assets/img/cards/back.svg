@@ -1,0 +1,41 @@
+<svg width="640" height="960" viewBox="0 0 640 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#15243A"/>
+      <stop offset="1" stop-color="#0E1A2D"/>
+    </linearGradient>
+    <linearGradient id="inner" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101C2E" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#0B1524" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F9FAFB"/>
+      <stop offset="0.5" stop-color="#D8E0F2"/>
+      <stop offset="1" stop-color="#F9FAFB"/>
+    </linearGradient>
+    <filter id="glow" x="-40" y="-40" width="720" height="1040" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#0B111C" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <rect x="12" y="12" width="616" height="936" rx="36" fill="url(#bg)" filter="url(#glow)"/>
+  <rect x="50" y="50" width="540" height="860" rx="26" fill="url(#inner)" stroke="#0E223E" stroke-opacity="0.38"/>
+
+  <g transform="translate(110 190)">
+    <path
+      d="M104 130C104 77.9807 146.981 35 199 35H334C391.228 35 438 81.7715 438 139C438 196.228 391.228 243 334 243H234C212.565 243 195.185 260.191 195.001 281.624C194.812 304.143 212.825 322 235.344 322H331C387.438 322 433 367.562 433 424C433 480.438 387.438 526 331 526H194C141.981 526 99 483.019 99 431V423C99 378.817 134.817 343 179 343H280C301.435 343 318.815 325.809 318.999 304.376C319.188 281.857 301.175 264 278.656 264H183C126.772 264 80 217.228 80 160C80 102.772 126.772 56 183 56H334C354.33 56 371 39.3304 371 19C371 -1.33042 354.33 -18 334 -18H199C146.981 -18 104 24.9807 104 77V130Z"
+      fill="url(#metal)"
+      fill-opacity="0.94"
+    />
+    <path
+      d="M254 206L264.541 176L275 206L304.574 207.426L280.5 226.5L289.082 255.574L264.541 238.5L240 255.574L248.582 226.5L224.508 207.426L254 206Z"
+      fill="#0E1A2D"
+      fill-opacity="0.85"
+    />
+    <path
+      d="M304 96L312.541 72L322 96L344.697 97.6974L324.5 114.5L333.488 137.697L312.541 123.5L291.594 137.697L300.582 114.5L280.385 97.6974L304 96Z"
+      fill="#0E1A2D"
+      fill-opacity="0.85"
+    />
+  </g>
+</svg>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { QAKey } from '../types/quickActions'
 export type { QAKey } from '../types/quickActions'
 
@@ -27,6 +27,33 @@ const items: Array<{ key: QAKey; label: string; icon: IconName }> = [
 ]
 
 const innerActive = ref<QAKey>('games')
+const viewportOffset = ref(0)
+
+function bindViewport() {
+  const vv = window.visualViewport
+  if (!vv) return
+  const update = () => {
+    // если клавиатура сжимает viewport — фиксируем нижний зазор, иначе 0
+    const delta = Math.max(0, window.innerHeight - (vv.height + vv.offsetTop))
+    viewportOffset.value = delta
+  }
+  vv.addEventListener('resize', update, { passive: true })
+  vv.addEventListener('scroll', update, { passive: true })
+  update()
+  return () => {
+    vv.removeEventListener('resize', update)
+    vv.removeEventListener('scroll', update)
+  }
+}
+
+onMounted(() => {
+  cleanup.value = bindViewport() || null
+})
+
+const cleanup = ref<(() => void) | null>(null)
+onUnmounted(() => {
+  cleanup.value?.()
+})
 
 watch(
   () => props.modelValue,
@@ -62,6 +89,7 @@ function iconPath(name: IconName) {
   <div
     :class="[fixed ? 'fixed left-0 right-0 bottom-0 z-40' : 'relative', 'px-4 flex justify-center']"
     style="padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px)"
+    :style="{ paddingBottom: `calc(env(safe-area-inset-bottom, 0px) + 12px + ${viewportOffset}px)` }"
   >
     <div class="nav-shell">
       <div class="nav-blur" />

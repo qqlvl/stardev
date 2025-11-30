@@ -26,12 +26,13 @@ const router = useRouter()
 
 /** ВАЖНО: id должны быть уникальны, иначе будут конфликты ключей в v-for */
 const games = ref<Game[]>([
-  { id:'slots',  title:'',  thumbnail: slotsPng,  isPopular:true, playUrl:'/play/slots' },
-  { id:'mines',  title:'',  thumbnail: soonPng, isNew:true,    playUrl:'/play/mines' },
-  { id:'crash',  title:'',  thumbnail: soonPng, isNew:true,    playUrl:'/play/crash' },
-  { id:'dice',   title:'',  thumbnail: soonPng,                playUrl:'/play/dice' },
-  { id:'plinko', title:'',  thumbnail: soonPng,                playUrl:'/play/plinko' },
-  { id:'keno',   title:'',  thumbnail: soonPng,                playUrl:'/play/keno' },
+  { id: 'slots', title: 'Slots', thumbnail: slotsPng, isPopular: true, playUrl: '/play/slots' },
+  { id: 'blackjack', title: 'Blackjack', thumbnail: soonPng, isNew: true, playUrl: '/play/blackjack' },
+  { id: 'mines', title: 'Mines', thumbnail: soonPng, isNew: true, playUrl: '/play/mines' },
+  { id: 'crash', title: 'Crash', thumbnail: soonPng, isNew: true, playUrl: '/play/crash' },
+  { id: 'dice', title: 'Dice', thumbnail: soonPng, playUrl: '/play/dice' },
+  { id: 'plinko', title: 'Plinko', thumbnail: soonPng, playUrl: '/play/plinko' },
+  { id: 'keno', title: 'Keno', thumbnail: soonPng, playUrl: '/play/keno' },
 ])
 
 function play(g: Game) {
