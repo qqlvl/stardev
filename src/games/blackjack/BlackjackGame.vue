@@ -241,7 +241,7 @@ function moveToNextHandOrDealer() {
 
     <section class="table">
       <div class="dealer-area">
-        <div v-if="dealerCards.length" class="dealer-score">{{ dealerDisplayScore }}</div>
+        <div v-if="dealerCards.length" class="score-chip dealer-score">{{ dealerDisplayScore }}</div>
         <TransitionGroup
           appear
           v-if="dealerCards.length"
@@ -307,7 +307,7 @@ function moveToNextHandOrDealer() {
             }"
             :style="{ '--hand-offset': `${hIdx * 12}px` }"
           >
-            <div class="hand-score">{{ calcScore(hand.cards) }}</div>
+            <div class="score-chip hand-score">{{ calcScore(hand.cards) }}</div>
             <TransitionGroup appear name="deal" tag="div" class="cards-row stacked hand-cards">
               <div
                 class="card"
@@ -472,9 +472,9 @@ function moveToNextHandOrDealer() {
 .table {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 16px 12px 14px;
-  min-height: 400px;
+  gap: 8px;
+  padding: 10px 10px 12px;
+  min-height: 320px;
   border-radius: 18px;
   background: linear-gradient(180deg, rgba(27, 41, 62, 0.92), rgba(13, 20, 32, 0.96));
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -483,14 +483,14 @@ function moveToNextHandOrDealer() {
 
 .dealer-area {
   position: relative;
-  padding-top: 26px;
+  padding-top: 18px;
 }
 
 .cards-row {
   display: flex;
   gap: 10px;
   justify-content: center;
-  min-height: 140px;
+  min-height: 120px;
   align-content: center;
   flex-wrap: wrap;
 }
@@ -522,10 +522,10 @@ function moveToNextHandOrDealer() {
 
 .hand-wrap {
   position: relative;
-  padding-top: 16px;
-  transform: translateY(var(--hand-offset, 0));
+  padding-top: 12px;
+  transform: translateY(calc(var(--hand-offset, 0) * 0.6));
   transition: box-shadow 180ms ease, transform 180ms ease, opacity 180ms ease;
-  padding-bottom: 6px;
+  padding-bottom: 4px;
 }
 
 .hand-wrap.active {
@@ -552,23 +552,35 @@ function moveToNextHandOrDealer() {
   background: #6b7280;
 }
 
-.hand-score {
+.score-chip {
   position: absolute;
-  top: 0;
+  top: 15px;
   left: 50%;
-  transform: translate(-50%, -60%);
-  background: #ef4444;
-  color: #fff;
-  font-weight: 800;
+  transform: translate(-50%, -50%);
+  font-weight: 900;
+  font-size: 12px;
   padding: 6px 12px;
   border-radius: 999px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+  z-index: 400;
+  pointer-events: none;
+}
+
+.dealer-score {
+  background: rgba(15, 23, 42, 0.92);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.hand-score {
+  background: rgba(239, 68, 68, 0.92);
+  color: #fff;
   box-shadow: 0 8px 18px rgba(239, 68, 68, 0.35);
-  z-index: 12;
 }
 
 .card {
-  width: 82px;
-  height: 108px;
+  width: min(24vw, 86px);
+  height: min(32vw, 116px);
   border-radius: 12px;
   background: transparent;
   perspective: 1000px;
@@ -648,37 +660,8 @@ function moveToNextHandOrDealer() {
 
 .player-area {
   position: relative;
-  padding-top: 14px;
-  padding-bottom: 10px;
-}
-
-.player-score {
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #ef4444;
-  color: #fff;
-  font-weight: 900;
-  padding: 6px 12px;
-  border-radius: 999px;
-  box-shadow: 0 10px 20px rgba(239, 68, 68, 0.35);
-  z-index: 10;
-}
-
-.dealer-score {
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(15, 23, 42, 0.8);
-  color: #fff;
-  font-weight: 800;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
-  z-index: 10;
+  padding-top: 10px;
+  padding-bottom: 6px;
 }
 
 .controls {
