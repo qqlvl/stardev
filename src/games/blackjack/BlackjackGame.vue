@@ -815,7 +815,7 @@ function moveToNextHandOrDealer() {
 }
 
 .bet-actions.single {
-  margin-top: 0;
+  margin-top: 6px;
 }
 
 .bet-btn {
