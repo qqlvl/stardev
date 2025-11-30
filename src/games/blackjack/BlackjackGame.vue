@@ -32,6 +32,8 @@ const playerCards = computed<Card[]>(() => currentHand.value?.cards ?? [])
 const playerScore = computed(() => calcScore(playerCards.value))
 const dealerScore = computed(() => calcScore(dealerCards.value))
 const dealerDisplayScore = computed(() => (dealerHidden.value ? '?' : dealerScore.value))
+const isBettingPhase = computed(() => phase.value === 'idle' || phase.value === 'finished')
+const isPlayerPhase = computed(() => phase.value === 'player')
 
 const canBet = computed(() => bet.value > 0 && bet.value <= balance.value && phase.value !== 'player')
 const canHit = computed(() => phase.value === 'player')
@@ -350,86 +352,79 @@ function moveToNextHandOrDealer() {
     </section>
 
     <section class="controls">
-      <div class="actions-row">
-        <button type="button" class="btn-glass-outline action-btn" :disabled="!canHit" @click="hit">
-          Hit
-        </button>
-        <button type="button" class="btn-glass-outline action-btn" :disabled="!canStand" @click="stand">
-          Stand
-        </button>
-        <button
-          type="button"
-          class="btn-glass-outline action-btn"
-          :class="{ ghost: !canSplit }"
-          :disabled="!canSplit"
-          @click="handleSplit"
-        >
-          Split
-        </button>
-        <button
-          type="button"
-          class="btn-glass-outline action-btn"
-          :class="{ ghost: !canDouble }"
-          :disabled="!canDouble"
-          @click="doubleDown"
-        >
-          Double
-        </button>
-      </div>
+      <template v-if="isPlayerPhase">
+        <div class="actions-row">
+          <button type="button" class="btn-glass-outline action-btn" :disabled="!canHit" @click="hit">
+            Hit
+          </button>
+          <button type="button" class="btn-glass-outline action-btn" :disabled="!canStand" @click="stand">
+            Stand
+          </button>
+          <button
+            type="button"
+            class="btn-glass-outline action-btn"
+            :class="{ ghost: !canSplit }"
+            :disabled="!canSplit"
+            @click="handleSplit"
+          >
+            Split
+          </button>
+          <button
+            type="button"
+            class="btn-glass-outline action-btn"
+            :class="{ ghost: !canDouble }"
+            :disabled="!canDouble"
+            @click="doubleDown"
+          >
+            Double
+          </button>
+        </div>
+      </template>
 
-      <div class="bet-section">
-        <div class="bet-card">
-          <div class="bet-inner">
-            <div class="bet-input-wrap">
-              <span class="bet-currency">$</span>
-              <input
-                id="bet"
-                v-model.number="bet"
-                type="number"
-                min="1"
-                step="0.01"
-                name="bet"
-                class="bet-input"
-              />
-            </div>
-            <div class="bet-inline-actions">
-              <div class="bet-modifiers-inline">
-                <button type="button" class="btn-glass-outline bet-chip bet-chip-sm" @click="betHalf">
-                  1/2
-                </button>
-                <button type="button" class="btn-glass-outline bet-chip bet-chip-sm" @click="betDouble">
-                  2x
-                </button>
-                <button type="button" class="btn-glass-outline bet-chip bet-chip-sm" @click="betMax">
-                  MAX
-                </button>
+      <template v-else-if="isBettingPhase">
+        <div class="bet-section">
+          <div class="bet-card">
+            <div class="bet-inner">
+              <div class="bet-input-wrap">
+                <span class="bet-currency">$</span>
+                <input
+                  id="bet"
+                  v-model.number="bet"
+                  type="number"
+                  min="1"
+                  step="0.01"
+                  name="bet"
+                  class="bet-input"
+                />
+              </div>
+              <div class="bet-inline-actions">
+                <div class="bet-modifiers-inline">
+                  <button type="button" class="btn-glass-outline bet-chip bet-chip-sm" @click="betHalf">
+                    1/2
+                  </button>
+                  <button type="button" class="btn-glass-outline bet-chip bet-chip-sm" @click="betDouble">
+                    2x
+                  </button>
+                  <button type="button" class="btn-glass-outline bet-chip bet-chip-sm" @click="betMax">
+                    MAX
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="bet-actions">
-          <div class="bet-chips">
+          <div class="bet-actions single">
             <button
-              v-for="val in quickBets"
-              :key="val"
               type="button"
-              class="btn-glass-outline bet-chip"
-              @click="setQuickBet(val)"
+              class="btn bet-btn"
+              :disabled="!canBet"
+              @click="startRound"
             >
-              ${{ val }}
+              Bet
             </button>
           </div>
-          <button
-            type="button"
-            class="btn bet-btn"
-            :disabled="!canBet"
-            @click="startRound"
-          >
-            Bet
-          </button>
         </div>
-      </div>
+      </template>
     </section>
   </div>
 </template>
@@ -694,7 +689,7 @@ function moveToNextHandOrDealer() {
 .controls {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .actions-row {
@@ -723,8 +718,8 @@ function moveToNextHandOrDealer() {
 .bet-section {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding-top: 6px;
+  gap: 10px;
+  padding-top: 4px;
 }
 
 .bet-card {
@@ -835,17 +830,14 @@ function moveToNextHandOrDealer() {
 .bet-actions {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   margin-top: 0;
   align-items: center;
   width: 100%;
 }
 
-.bet-chips {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  width: 100%;
+.bet-actions.single {
+  margin-top: 0;
 }
 
 .bet-btn {
