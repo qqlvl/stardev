@@ -350,10 +350,10 @@ function moveToNextHandOrDealer() {
       <template v-if="isPlayerPhase">
         <div class="actions-row">
           <button type="button" class="btn-glass-outline action-btn" :disabled="!canHit" @click="hit">
-            Hit
+            Hit <span class="action-icon">➕</span>
           </button>
           <button type="button" class="btn-glass-outline action-btn" :disabled="!canStand" @click="stand">
-            Stand
+            Stand <span class="action-icon">✋</span>
           </button>
           <button
             type="button"
@@ -362,7 +362,7 @@ function moveToNextHandOrDealer() {
             :disabled="!canSplit"
             @click="handleSplit"
           >
-            Split
+            Split <span class="action-icon">✂️</span>
           </button>
           <button
             type="button"
@@ -371,7 +371,7 @@ function moveToNextHandOrDealer() {
             :disabled="!canDouble"
             @click="doubleDown"
           >
-            Double
+            Double <span class="action-icon">⨉2</span>
           </button>
         </div>
       </template>
@@ -682,10 +682,19 @@ function moveToNextHandOrDealer() {
   font-weight: 800;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .action-btn.ghost {
   opacity: 0.4;
+}
+
+.action-icon {
+  font-size: 14px;
+  opacity: 0.9;
 }
 
 .bet-row {

@@ -20,10 +20,6 @@ const emit = defineEmits<{
     <header
       class="sticky top-0 z-30 bg-base-100/90 backdrop-blur border-b border-white/5"
     >
-      <div class="mx-auto w-full max-w-[480px] px-3 py-2 flex items-center gap-2">
-        <div class="flex-1" />
-      </div>
-
       <LiveTicker v-if="showTicker" />
     </header>
 
