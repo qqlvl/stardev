@@ -24,7 +24,6 @@ const hasMultipleHands = computed(() => playerHands.value.length > 1)
 
 const balance = ref<number>(500)
 const bet = ref<number>(25)
-const quickBets = [5, 10, 20, 50]
 
 const currentHand = computed<Hand | null>(() => playerHands.value[activeHandIndex.value] ?? null)
 const playerCards = computed<Card[]>(() => currentHand.value?.cards ?? [])
@@ -195,10 +194,6 @@ function betDouble() {
 
 function betMax() {
   bet.value = Number(balance.value.toFixed(2))
-}
-
-function setQuickBet(val: number) {
-  bet.value = val
 }
 
 function doubleDown() {
